@@ -3,7 +3,7 @@ const Banner = () => {
     <div className="relative h-[400px] md:h-[90vh]">
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className={`absolute inset-0 bg-cover bg-center background-moving`}
         style={{ backgroundImage: "url('https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/vector_02.JPG')" }}
       ></div>
 
