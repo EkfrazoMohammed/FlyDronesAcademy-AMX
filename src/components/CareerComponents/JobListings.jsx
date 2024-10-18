@@ -93,13 +93,13 @@ const JobListings = () => {
             <div className="flex flex-col justify-between items-center gap-2 md:gap-4 max-w-[1280px] m-auto">
               {data.map((item) => {
                 return (
-                  <div key={item.id} className="w-full flex justify-between gap-10 items-start py-6 px-8">
-                    <div className="department_name text-[1.8rem]">{item.department}</div>
+                  <div key={item.id} className="w-full flex flex-col md:flex-row justify-between gap-4 md:gap-10 items-start py-2 px-4 md:py-6 md:px-8">
+                    <div className="department_name text-[1.1rem] md:text-[1.8rem]">{item.department}</div>
 
-                    <div className="role_cards_container flex flex-col gap-8 md:gap-8">
+                    <div className="role_cards_container flex flex-col gap-4 md:gap-8">
                       {item.roles.map((role) => {
                         return (
-                          <div key={role.id} className="role_cards flex gap-2 flex-col border rounded-[20px] w-[500px] h-auto p-6">
+                          <div key={role.id} className="role_cards text-[1.1rem] flex gap-2 flex-col  border rounded-[20px] w-[350px] md:w-[500px] h-auto p-3 md:p-6">
                             <div className="para1">{role.title}</div>
                             <div className="para1">{role.description}</div>
                             <button
@@ -119,14 +119,32 @@ const JobListings = () => {
           </div>
         </div>
       </div>
+{/* Modal for applying */}
+{isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 min-w-96">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full relative">
+            {/* Close Icon */}
+            <button
+              onClick={handleCloseModal}
+              className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
+            >
+              {/* SVG Icon for Close */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
 
-      {/* Modal for applying */}
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-4">Apply for Job</h2>
+            <h2 className="text-2xl font-bold mb-2">Apply for Job</h2>
+            <div className='text-md'>Please complete the form below to apply for the position with us.</div>
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block mb-2" htmlFor="name">Name</label>
                 <input
                   type="text"
@@ -135,10 +153,10 @@ const JobListings = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="border rounded w-full py-2 px-3"
+                  className="border rounded w-full py-1 px-2"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block mb-2" htmlFor="mobile_number">Mobile Number</label>
                 <input
                   type="text"
@@ -147,10 +165,10 @@ const JobListings = () => {
                   value={formData.mobile_number}
                   onChange={handleChange}
                   required
-                  className="border rounded w-full py-2 px-3"
+                  className="border rounded w-full py-1 px-2"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block mb-2" htmlFor="email">Email</label>
                 <input
                   type="email"
@@ -159,10 +177,10 @@ const JobListings = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="border rounded w-full py-2 px-3"
+                  className="border rounded w-full py-1 px-2"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block mb-2" htmlFor="job_experience">Job Experience</label>
                 <input
                   type="text"
@@ -171,23 +189,25 @@ const JobListings = () => {
                   value={formData.job_experience}
                   onChange={handleChange}
                   required
-                  className="border rounded w-full py-2 px-3"
+                  className="border rounded w-full py-1 px-2"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block mb-2" htmlFor="resume">Upload Resume</label>
                 <input
                   type="file"
                   id="resume"
                   name="resume"
+                  accept='application/pdf'
                   onChange={handleFileChange}
                   required
-                  className="border rounded w-full py-2 px-3"
+                  className="border rounded w-full py-1 px-2"
                 />
               </div>
               <div className="flex justify-between">
-                <button type="submit" className="text-primaryColor border rounded-full hover:text-white py-2 px-4 rounded hover:bg-blue-600">Submit</button>
-                <button type="button" onClick={handleCloseModal} className="bg-gray-300 text-black py-2 px-4 rounded hover:bg-gray-400">Cancel</button>
+                <button type="submit" className="text-primaryColor border rounded-full hover:text-white py-2 px-4 hover:bg-primaryColor">
+                  Submit
+                </button>
               </div>
             </form>
           </div>

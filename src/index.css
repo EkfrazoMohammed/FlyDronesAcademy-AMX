@@ -42,3 +42,42 @@
   text-align: justify !important;
   text-justify: inter-word !important;
 }
+
+/* Highlighted dates in yellow */
+.highlight-yellow {
+  background-color: yellow;
+  color: black;
+}
+
+/* Enabled dates */
+.enabled-date {
+  background-color: #e0f7fa;
+}
+
+/* Disabled dates */
+/* .disabled-date {
+  background-color: #f0f0f0;
+  color: #ccc;
+  pointer-events: none; }
+  */
+  @keyframes moveUp {
+    0% {
+      background-position: center top; /* Move to the top */
+    }
+    100% {
+      background-position: center bottom; /* Start from the bottom */
+    }
+  }
+  
+  .background-moving {
+    animation: moveUp 15s linear infinite; /* Infinite animation */
+    background-repeat: repeat-y; /* Allow vertical repetition */
+    background-size: cover; /* Ensure the background covers the div */
+    position: absolute; /* Position it correctly */
+    top: 0; /* Start at the top */
+    left: 0; /* Start at the left */
+    right: 0; /* Extend to the right */
+    bottom: 0; /* Extend to the bottom */
+    z-index: -1; /* Keep it behind other elements */
+  }
+  
