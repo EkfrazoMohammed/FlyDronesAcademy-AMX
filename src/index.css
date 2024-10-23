@@ -60,24 +60,48 @@
   color: #ccc;
   pointer-events: none; }
   */
-  @keyframes moveUp {
-    0% {
-      background-position: center top; /* Move to the top */
-    }
-    100% {
-      background-position: center bottom; /* Start from the bottom */
-    }
+@keyframes moveUp {
+  0% {
+    background-position: center top;
+    /* Move to the top */
   }
-  
-  .background-moving {
-    animation: moveUp 15s linear infinite; /* Infinite animation */
-    background-repeat: repeat-y; /* Allow vertical repetition */
-    background-size: cover; /* Ensure the background covers the div */
-    position: absolute; /* Position it correctly */
-    top: 0; /* Start at the top */
-    left: 0; /* Start at the left */
-    right: 0; /* Extend to the right */
-    bottom: 0; /* Extend to the bottom */
-    z-index: -1; /* Keep it behind other elements */
+
+  100% {
+    background-position: center bottom;
+    /* Start from the bottom */
   }
-  
+}
+
+.background-moving {
+  animation: moveUp 15s linear infinite;
+  /* Infinite animation */
+  background-repeat: repeat-y;
+  /* Allow vertical repetition */
+  background-size: cover;
+  /* Ensure the background covers the div */
+  position: absolute;
+  /* Position it correctly */
+  top: 0;
+  /* Start at the top */
+  left: 0;
+  /* Start at the left */
+  right: 0;
+  /* Extend to the right */
+  bottom: 0;
+  /* Extend to the bottom */
+  z-index: -1;
+  /* Keep it behind other elements */
+}
+
+.flipbook-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.page {
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
