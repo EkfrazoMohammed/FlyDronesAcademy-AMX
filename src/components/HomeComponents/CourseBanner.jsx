@@ -6,19 +6,130 @@ import RazorpayPayment from '../utils/RazorpayPayment';
 import PaymentSuccessModal from '../utils/PaymentSuccessModal';
 
 const CourseBanner = () => {
-  // States to handle form data and OTP management
+  
   const [formData, setFormData] = useState({
     name: '',
     mobile_number: '',
     email: '',
+    address: '',
     organization_name: '',
-    resume: null,
   });
+
+  const [errorMessages, setErrorMessages] = useState({
+    name: '',
+    mobile_number: '',
+    email: '',
+    address: '',
+  });
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Clear the error message for the current field on change
+    setErrorMessages((prev) => ({ ...prev, [name]: '' }));
+  };
+  const customer_id=localStorage.getItem("newUserId")
+  
   const [otpMobile, setOtpMobile] = useState('');
   const [otpEmail, setOtpEmail] = useState('');
-  const [otpTimer, setOtpTimer] = useState(0);
   const [isMobileOtpSent, setIsMobileOtpSent] = useState(false);
   const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
+  const [otpTimerMobile, setOtpTimerMobile] = useState(60);
+  const [otpTimerEmail, setOtpTimerEmail] = useState(60);
+  const [mobileVerified, setMobileVerified] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
+
+  const handleSendMobileOtp = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/api/send_otp/', {
+        mobile: formData.mobile_number,
+      });
+      console.log(response.data.message); // "OTP sent successfully"
+      setIsMobileOtpSent(true);
+      setOtpTimerMobile(30); // Reset the timer
+    } catch (error) {
+      console.error('Error sending OTP to mobile:', error);
+    }
+  };
+
+
+
+  const handleOtpChange = (e, type) => {
+    const { value } = e.target;
+    if (type == 'mobile') {
+      setOtpMobile(value);
+    } else {
+      setOtpEmail(value);
+    }
+  };
+
+  // Timer effect for mobile OTP
+  useEffect(() => {
+    let timer;
+    if (otpTimerMobile > 0) {
+      timer = setInterval(() => {
+        setOtpTimerMobile((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [otpTimerMobile]);
+
+ // Timer effect for OTP countdown
+ useEffect(() => {
+  let timer;
+  if (isEmailOtpSent && otpTimerEmail > 0) {
+    timer = setInterval(() => {
+      setOtpTimerEmail((prev) => prev - 1);
+    }, 1000); // Decrease timer every second
+  } else if (otpTimerEmail === 0) {
+    setIsEmailOtpSent(false); // Hide OTP input and reset state
+  }
+  return () => clearInterval(timer);
+}, [isEmailOtpSent, otpTimerEmail]);
+// Handle OTP sending
+const handleSendEmailOtp = async () => {
+  console.log("Sending OTP to email:", formData.email);
+  setIsEmailOtpSent(true);
+  // Your API call to send OTP here, e.g.:
+  try {
+    await axios.post('http://localhost:8000/api/send_otp/', {
+      email: formData.email,
+    });
+    console.log("OTP sent successfully");
+    setOtpTimerEmail(30); // Reset the timer for 30 seconds
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+  }
+};
+const [errorMessage, setErrorMessage] = useState('');
+
+const verifyOtp = async (type) => {
+  try {
+    if (type === 'email') {
+      const response = await axios.post('http://localhost:8000/api/verify_otp/', {
+        email: formData.email,
+        otp: otpEmail,
+      });
+
+      // Check if the response indicates success
+      if (response.data.message === 'OTP verified successfully') {
+        setEmailVerified(true); // Update state to indicate email is verified
+        console.log('Email verified');
+        setErrorMessage(''); // Clear any previous error messages
+      } else {
+        // Set error message for invalid OTP
+        setErrorMessage('Invalid OTP, please try again or resend the OTP.');
+        console.error('Invalid email OTP');
+      }
+    }
+  } catch (error) {
+    // Handle any errors that occur during the request
+    setErrorMessage('Invalid OTP, please try again or resend the OTP.');
+    console.error('OTP verification error:', error);
+  }
+};
 
   const [selectedCourse, setSelectedCourse] = useState(null);  // Track the selected course for the modal
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
@@ -63,67 +174,6 @@ const allDatesData = courses.map(course => ({
     slots: createDatesData(course),
 }));
 
-console.log(allDatesData);
-  const handleChange = (e) => {
-                const { name, value } = e.target;
-                setFormData((prevData) => ({
-                  ...prevData,
-                  [name]: value,
-                }));
-              };
-
-              const handleSendMobileOtp = () => {
-                            // Simulate sending OTP to mobile and receiving OTP
-                            // In a real application, you would call your API here
-                            console.log("Sending OTP to mobile:", formData.mobile_number);
-                            setOtpTimer(10); // Set timer for 1 minute
-                            setIsMobileOtpSent(true);
-                          };
-                        
-                          const handleSendEmailOtp = () => {
-                            // Simulate sending OTP to email and receiving OTP
-                            console.log("Sending OTP to email:", formData.email);
-                            setOtpTimer(60); // Set timer for 1 minute
-                            setIsEmailOtpSent(true);
-                          };
-                        
-                          const handleOtpChange = (e, type) => {
-                            const { value } = e.target;
-                            if (type === 'mobile') {
-                              setOtpMobile(value);
-                            } else {
-                              setOtpEmail(value);
-                            }
-                          };
-                      
-                        
-                          // Timer effect
-                          useEffect(() => {
-                            let timer;
-                            if (otpTimer > 0) {
-                              timer = setInterval(() => {
-                                setOtpTimer((prev) => prev - 1);
-                              }, 1000);
-                            } else if (otpTimer === 0) {
-                              setIsMobileOtpSent(false);
-                              setIsEmailOtpSent(false);
-                            }
-                            return () => clearInterval(timer);
-                          }, [otpTimer]);
-                        
-                          // Verify OTP
-                          const verifyOtp = (type) => {
-                            // Simulate OTP verification
-                            // In a real application, you would call your API to verify the OTP
-                            if (type === 'mobile') {
-                        console.log(type)
-                            } else if (type === 'email') {
-                              console.log(type)
-                            }
-                          };
-
-                          
- 
 
   // Modal handlers
   const handleOpenModal = (course) => {
@@ -132,11 +182,29 @@ console.log(allDatesData);
     setIsFirstModalOpen(true);
   };
 
+ 
   const handleCloseModal = () => {
     setIsFirstModalOpen(false);
     setIsSecondModalOpen(false);
     setShowSuccessmodal(false);
-  };
+    
+    // Reset all state variables
+    setFormData({
+        name: '',
+        mobile_number: '',
+        email: '',
+        address: '',
+        organization_name: '',
+    });
+    setOtpMobile('');
+    setOtpEmail('');
+    setIsMobileOtpSent(false);
+    setIsEmailOtpSent(false);
+    setOtpTimerMobile(60);
+    setOtpTimerEmail(60);
+    setMobileVerified(false);
+    setEmailVerified(false);
+};
 
  
 const handleOpenSecondModal = () => {
@@ -156,13 +224,77 @@ const handleOpenSecondModal = () => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-  console.log(formData);
-
-  // Close the first modal
-  setIsFirstModalOpen(false);
   
-  // Open the second modal with available dates
-  handleOpenSecondModal(); 
+  // Reset the error message
+  setErrorMessage('');
+  e.preventDefault();
+    
+  // Reset error messages
+  setErrorMessages({
+    name: '',
+    mobile_number: '',
+    email: '',
+    address: '',
+  });
+
+  let hasError = false;
+  
+  // Validate form fields and set error messages
+  if (!formData.name) {
+    setErrorMessages((prev) => ({ ...prev, name: 'Name is required.' }));
+    hasError = true;
+  }
+
+  if (!formData.mobile_number) {
+    setErrorMessages((prev) => ({ ...prev, mobile_number: 'Mobile number is required.' }));
+    hasError = true;
+  }
+
+  if (!formData.email) {
+    setErrorMessages((prev) => ({ ...prev, email: 'Email is required.' }));
+    hasError = true;
+  }
+
+  if (!formData.address) {
+    setErrorMessages((prev) => ({ ...prev, address: 'Address is required.' }));
+    hasError = true;
+  }
+
+  if (hasError) return; // Stop submission if there are validation errors
+
+  // setIsFirstModalOpen(false);
+  // handleOpenSecondModal(); 
+
+  // Prepare API payload
+  const apiData = {
+    name: formData.name,
+    address: formData.organization_name, // Assuming organization name is used as address
+    phone_number: formData.mobile_number,
+    email: formData.email,
+    organization: formData.organization_name || '', // If optional, make it an empty string if not provided
+  };
+  
+  
+  try {
+    const response = await axios.post('http://localhost:8000/api/course_register/', apiData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log('API Response:', response.data);
+    
+    if(response.status == 201 && response.data) {
+      
+      let newUserId=response.data?.result?.id
+      console.log(newUserId)
+      localStorage.setItem("newUserId", newUserId)
+      setIsFirstModalOpen(false);
+    handleOpenSecondModal(); 
+    } 
+  } catch (error) {
+    alert('unable to create user')
+    console.error('API Error:', error.response ? error.response.data : error);
+  }
 };
 
 const handleSelectEvent = async (event) => {
@@ -170,7 +302,7 @@ const handleSelectEvent = async (event) => {
   
   // Assuming the event contains course and slot information
   const data = {
-    customerId: 5, // Replace with dynamic customer ID if needed
+    customerId: customer_id || localStorage.getItem("newUserId"), // Replace with dynamic customer ID if needed
     courseId: selectedCourse.id, // Assuming selectedCourse.id corresponds to the course ID
     slotId: event.slotId, // You might need to get the slot ID from the event or context
     amount:selectedCourse.amount
@@ -220,126 +352,161 @@ const handleSelectEvent = async (event) => {
           <Modal isOpen={isFirstModalOpen && selectedCourse?.id === item.id} onClose={handleCloseModal}>
             <h2 className="text-2xl font-bold ">Book a Slot</h2>
               {/* Form fields... */}
-              <form  className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Name</label>
-                 <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="border rounded py-1 px-2 w-full"
-                  required
-                />
-              </div>
+          
+              <div className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Name</label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          className="border rounded py-1 px-2 w-full"
+          required
+        />
+      {errorMessages.name && <div className="text-red-600 text-sm">{errorMessages.name}</div>}
+      </div>
+        
+     {/* Mobile OTP Section */}
+<div>
+  <label className="block text-sm font-medium text-gray-700">Mobile Number</label>
+  <div className="mt-2 flex items-center justify-between">
+    <input
+      type="number"
+      name="mobile_number"
+      value={formData.mobile_number}
+      onChange={handleChange}
+      className="border rounded py-1 px-2 w-[75%]"
+      required
+    />
+    <button
+      onClick={handleSendMobileOtp}
+      type="button"
+      disabled={isMobileOtpSent || !formData.mobile_number}
+      className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
+    >
+      {isMobileOtpSent ? 'Resend SMS OTP' : 'Send SMS OTP'}
+    </button>
+  </div>
+  {isMobileOtpSent && (
+    <div className="mt-2 flex items-center">
+      <input
+        type="text"
+        value={otpMobile}
+        onChange={(e) => handleOtpChange(e, 'mobile')}
+        placeholder="Enter OTP"
+        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+      />
+      <button
+        onClick={() => verifyOtp('mobile')}
+        className={`mt-2 ml-2 px-4 py-2 rounded ${
+          mobileVerified ? 'bg-green-500 text-white' : 'text-green-500'
+        }`}
+        disabled={mobileVerified}
+      >
+        {mobileVerified ? '✅ Verified' : 'Verify'}
+      </button>
+    </div>
+  )}
+  {isMobileOtpSent && otpTimerMobile > 0 && (
+    <div className="text-sm text-gray-500">OTP valid for: {otpTimerMobile} seconds</div>
+  )}
+{errorMessages.mobile_number && <div className="text-red-600 text-sm">{errorMessages.mobile_number}</div>}
+</div>
+     
+<div>
+  <label className="block text-sm font-medium text-gray-700">Email</label>
+  <div className="mt-2 flex items-center justify-between">
+    <input
+      type="email"
+      name="email"
+      value={formData.email}
+      onChange={handleChange}
+      className="border rounded py-1 px-2 w-[75%]"
+      required
+      disabled={emailVerified} // Disable input if verified
+    />
+    <button
+      onClick={handleSendEmailOtp}
+      type="button"
+      disabled={isEmailOtpSent || !formData.email || emailVerified}
+      className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
+    >
+      {isEmailOtpSent  ? 'Resend Email OTP' : 'Send Email OTP'}
+    </button>
+  </div>
+  {isEmailOtpSent && (
+    <div className="mt-2 flex items-center">
+      <input
+        type="text"
+        value={otpEmail}
+        onChange={(e) => handleOtpChange(e, 'email')}
+        placeholder="Enter Email OTP"
+        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        disabled={emailVerified} // Disable input if verified
+      />
+      {emailVerified ? <>
+        <button
+         className={`mt-2 ml-2 px-4 py-2 rounded bg-green-500 text-white`}
+        disabled={emailVerified} // Disable if already verified
+      >
+        {emailVerified ? 'Verified' : 'Verify'}
+      </button>
+      </>:<>
+      <button
+        onClick={() => verifyOtp('email')}
+        className={`mt-2 ml-2 px-4 py-2 rounded text-green-500`}
+      >
+        {emailVerified ? 'Verified' : 'Verify'}
+      </button>
+      </>}
+    
+    </div>
+  )}
+  {isEmailOtpSent && !emailVerified && otpTimerEmail > 0 && (
+    <div className="text-sm text-gray-500">OTP valid for: {otpTimerEmail} seconds</div>
+  )}
+  
+  {emailVerified && <div className="text-sm mt-2 text-green-600">Email successfully verified!</div>}
+  {errorMessages.email && <div className="text-red-600 text-sm">{errorMessages.email}</div>}
+    
+</div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Mobile Number</label>
-                <div className="mt-2 flex items-center justify-between">
-                  
-                <input
-                  type="number"
-                  name="mobile_number"
-                  value={formData.mobile_number}
-                  onChange={handleChange}
-                   className="border rounded py-1 px-2 w-[75%]"
-                  required
-                />
-              
-                <button
-                  onClick={handleSendMobileOtp}
-                  type="button"
-                  disabled={isMobileOtpSent || !formData.mobile_number}
-                  className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
-                >
-                  Send SMS OTP
-                </button>
-                
-                </div>
-                {isMobileOtpSent && (
-                  <div className="mt-2 flex items-center">
-                    <input
-                      type="text"
-                      value={otpMobile}
-                      onChange={(e) => handleOtpChange(e, 'mobile')}
-                      placeholder="Enter OTP"
-                      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    />
-                    <button
-                      onClick={() => verifyOtp('mobile')}
-                      className="mt-2 ml-2 px-4 py-2  text-green-500 rounded"
-                    >
-                     Verify
-                    </button>
-                  </div>
-                )}
-                {isMobileOtpSent && otpTimer > 0 && (
-                  <div className="text-sm text-gray-500">OTP valid for: {otpTimer} seconds</div>
-                )}
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Email</label>
-                <div className="mt-2 flex items-center justify-between">
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  
-                   className="border rounded py-1 px-2 w-[75%]"
-                  required
-                />
-                <button
-                  onClick={handleSendEmailOtp}
-                  type="button"
-                  disabled={isEmailOtpSent || !formData.email}
-                  className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
-                >
-                  Send Email OTP
-                </button>
-                </div>
-                {isEmailOtpSent && (
-                  <div className="mt-2 flex items-center">
-                    <input
-                      type="text"
-                      value={otpEmail}
-                      onChange={(e) => handleOtpChange(e, 'email')}
-                      placeholder="Enter Email OTP"
-                      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    />
-                    <button
-                      onClick={() => verifyOtp('email')}
-                      className="mt-2 ml-2 px-4 py-2  text-green-500 rounded"
-                    >
-                      Verify
-                    </button>
-                  </div>
-                )}
-                {isEmailOtpSent && otpTimer > 0 && (
-                  <div className="text-sm text-gray-500">OTP valid for: {otpTimer} seconds</div>
-                )}
-              </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Address</label>
+        <input
+          type="text"
+          name="address"
+          value={formData.address}
+          onChange={handleChange}
+          className="border rounded py-1 px-2 w-full"
+          required
+        />
+           {errorMessages.address && <div className="text-red-600 text-sm">{errorMessages.address}</div>}
+      
+      </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Organization Name (optional</label>
-                <input
-                  type="text"
-                  name="organization_name"
-                  value={formData.organization_name}
-                  onChange={handleChange}
-                  className="border rounded py-1 px-2 w-full"
-                />
-              </div>
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="w-full py-2 px-4 border rounded-full bg-white text-primaryColor font-bold  hover:bg-primaryColor hover:text-white cursor-pointer transition"
-              >
-                Next
-              </button>
-            </form>
-             
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Organization Name (optional)</label>
+        <input
+          type="text"
+          name="organization_name"
+          value={formData.organization_name}
+          onChange={handleChange}
+          className="border rounded py-1 px-2 w-full"
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="w-full py-2 px-4 border rounded-full bg-white text-primaryColor font-bold hover:bg-primaryColor hover:text-white cursor-pointer transition"
+        // disabled={!mobileVerified || !emailVerified}
+        onClick={handleSubmit}
+      >
+        Nexta
+      </button>
+    </div>
           </Modal>
 
           {/* Second Modal with Calendar */}
