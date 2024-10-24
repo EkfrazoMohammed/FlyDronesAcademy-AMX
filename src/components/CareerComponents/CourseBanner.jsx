@@ -31,7 +31,7 @@ const CourseBanner = () => {
     <div className="flex flex-col gap-3" >
 
     <div className="image-container w-[220px] h-[220px] md:w-[320px] md:h-[320px] object-cover">
-        <img className='h-full w-full' src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/flydro_logo_png_1.png" alt="" />
+        <img className='h-full w-full' loading="lazy" src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/flydro_logo_png_1.png" alt="" />
       </div>
 
     </div>

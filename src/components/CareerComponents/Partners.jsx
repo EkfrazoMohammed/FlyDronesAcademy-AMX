@@ -33,7 +33,7 @@ const Partners = () => {
                     <>
                          <div className="py-3 px-3 md:py-6 md:px-12 text-[1.2rem]">
               <div className="imageContainer w-full">
-                <img className="w-[130px] h-[130px]" src={item.image} alt="" />
+                <img className="w-[130px] h-[130px]" loading="lazy" src={item.image} alt="" />
               </div>
             </div>
                     </>

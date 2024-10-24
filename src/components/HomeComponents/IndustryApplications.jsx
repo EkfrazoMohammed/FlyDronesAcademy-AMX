@@ -1,25 +1,28 @@
 import React from 'react'
+import img1 from "../../assets/applications (1).png";  
+import img2 from "../../assets/applications (2).png";  
+import img3 from "../../assets/applications (3).png";  
+import img4 from "../../assets/applications (4).png";  
 
 const IndustryApplications = () => {
 
     const data=[
         {
-            image:"https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01_1_YSu.png",
-            text:"Aerial Survey & Mapping"
+          image:img3,
+          text:"Aerial Survey & Mapping"
         },
         {
-            image:"https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01_1_YSu.png",
-            text:"Lorem ipsum dolor sit"
-        },
-        {
-            image:"https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01_1_YSu.png",
-            text:"Lorem ipsum dolor sit"
-        },
-        {
-            image:"https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01_1_YSu.png",
-            text:"Lorem ipsum dolor sit"
-        },
-
+          image:img2,
+            text:"Photography & Videography"
+          },
+          {
+            image:img4,
+            text:"Agriculture"
+          },
+          {
+            image:img1,
+            text:"Hobby & Recreation"
+      },
     ]
   return (
     <div className='p-4 text-primaryColor'>
@@ -35,7 +38,7 @@ const IndustryApplications = () => {
       <div className="imageContainer md:w-full flex justify-center items-center">
         <img
           className="w-[120px] h-[120px] md:w-[160px] md:h-[160px]"
-          src={item.image}
+          loading="lazy" src={item.image}
           alt=""
         />
       </div>

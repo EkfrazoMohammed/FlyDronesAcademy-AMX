@@ -14,25 +14,25 @@ const Contacts = () => {
                   <div className="text-[1.6rem] md:text-[2rem] text-center md:text-leftfont-medium">FlyDro Academy Location</div>
                 <div className='flex gap-4'>
                 <div className="text-[1.8rem] font-medium">
-                  <img src="" alt="" />
+                  <img loading="lazy" src="" alt="" />
                   </div>
                 <div className="text-[1.1rem] font-medium max-w-full md:max-w-[50%]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, modi..</div>
                 </div>
                 <div className='flex gap-4'>
                 <div className="text-[1.8rem] font-medium">
-                  <img src="" alt="" />
+                  <img loading="lazy" src="" alt="" />
                   </div>
                 <div className="text-[1.1rem] font-medium max-w-full md:max-w-[50%]]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, modi..</div>
                 </div>
                 <div className='flex gap-4'>
                 <div className="text-[1.8rem] font-medium">
-                  <img src="" alt="" />
+                  <img loading="lazy" src="" alt="" />
                   </div>
                 <div className="text-[1.1rem] font-medium max-w-full md:max-w-[50%]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, modi..</div>
                 </div>
                 <div className='flex gap-4'>
                 <div className="text-[1.8rem] font-medium">
-                  <img src="" alt="" />
+                  <img loading="lazy" src="" alt="" />
                   </div>
                 <div className="text-[1.1rem] font-medium max-w-full md:max-w-[50%]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, modi..</div>
                 </div>

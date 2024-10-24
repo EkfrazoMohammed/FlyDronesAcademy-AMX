@@ -75,7 +75,7 @@ const Introduction = () => {
                 return (<>
                   <div className='flex gap-4'>
                     <div className="text-[1.8rem] font-medium">
-                      <img className="w-[120px] h-[120px]" src={value.image} alt={value.image} />
+                      <img className="w-[120px] h-[120px]" loading="lazy" src={value.image} alt={value.image} />
                     </div>
                     <div className="text-[1.2rem] font-medium max-w-full md:max-w-full flex justify-center items-center">
                       {value.text}
@@ -98,7 +98,7 @@ const Introduction = () => {
               documents.map((value, index) => {
                 return (<>
                   <div className='flex flex-col gap-2'>
-                      <img className="w-[260px] h-[220px] " src={value.image} alt={value.image} />
+                      <img className="w-[260px] h-[220px] " loading="lazy" src={value.image} alt={value.image} />
                       <div className='text-primaryColor text-[1.2rem] text-center'>{value.text}</div>
                   </div>
                 </>)

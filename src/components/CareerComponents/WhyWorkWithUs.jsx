@@ -40,7 +40,7 @@ const WhyWorkWithUs = () => {
       {data.map((item, index)=>{
         return (
           <div key={index}>
-            <img src={item.image} alt={item.image} className="w-[260px] h-[260px] object-cover" />
+            <img loading="lazy" src={item.image} alt={item.image} className="w-[260px] h-[260px] object-cover" />
           </div>
         )
       })}

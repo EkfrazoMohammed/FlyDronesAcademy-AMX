@@ -333,11 +333,15 @@ const handleSelectEvent = async (event) => {
       <div className="absolute inset-0 bg-yellow-500 opacity-15"></div>
       {/* Text Content */}
       {courses.map((item) => (
-        <div key={item.id} className="relative banner-text-container">
-          <div className="h-[400px] md:h-[80vh] flex flex-col md:flex-row justify-between items-center gap-6 md:gap-16 px-4 md:px-[5rem] py-2 md:py-8">
+        <div key={item.id} className="relative banner-text-container max-w-[1280px] m-auto">
+          <div className="h-[400px] md:h-[80vh] flex flex-col md:flex-row justify-between items-center gap-6 md:gap-16 px-4 md:px-12 py-2 md:py-8">
             <div className="flex flex-col gap-3 md:gap-12 w-full md:w-[80%] text-primaryColor">
               <div>
+                <div className='flex gap-2'>
                 <div className="text-[1.6rem] md:text-[2.2rem] mb-3 font-semibold">{item.course_name}</div>
+                <div className=" h-8 w-8 flex justify-center items-center text-[.4rem] md:text-[1rem] ring-primaryColor border-primaryColor border rounded-full mb-3 font-semibold"> {item.id}</div>
+                
+                </div>
                 <div className="text-justify text-[1rem] md:text-[1.4rem] font-medium course_description" >{item.description}</div>
                 {/* <div className="text-[1rem] md:text-[1.4rem] font-medium course_description" dangerouslySetInnerHTML={{ __html: item.description }} ></div> */}
               </div>
