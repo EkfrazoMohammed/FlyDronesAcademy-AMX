@@ -31,3 +31,7 @@
   background: linear-gradient(to right, #d1d5db 50%, transparent 50%) repeat-x; /* Adjust color and spacing */
   height: 4px; /* Match thickness */
 }
+
+html {
+  scroll-behavior: smooth;
+}
