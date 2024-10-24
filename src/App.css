@@ -24,3 +24,10 @@
   color: #ccc;
   pointer-events: none; /* Prevent clicking */
 }
+
+
+.straight-dotted-line {
+  border-top: 4px dotted transparent; /* Transparent border to preserve space */
+  background: linear-gradient(to right, #d1d5db 50%, transparent 50%) repeat-x; /* Adjust color and spacing */
+  height: 4px; /* Match thickness */
+}

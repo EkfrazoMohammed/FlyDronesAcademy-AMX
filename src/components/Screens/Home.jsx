@@ -6,7 +6,6 @@ import IndustryApplications from '../HomeComponents/IndustryApplications';
 import Locations from '../HomeComponents/Locations';
 import FAQ from '../HomeComponents/FAQ';
 import Partners from '../HomeComponents/Partners';
-import Contacts from '../HomeComponents/Contacts';
 
 const Home = () => {
   return (
@@ -35,9 +34,6 @@ const Home = () => {
       <div id="locations">
         <Locations />
       </div>
-      {/* <div id="contacts">
-        <Contacts />
-      </div> */}
     </div>
   );
 };

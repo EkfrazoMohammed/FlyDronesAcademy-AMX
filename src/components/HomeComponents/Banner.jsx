@@ -15,7 +15,7 @@ const Banner = () => {
 
       <div className=" text-black text-2xl font-bold flex justify-center items-center w-full md:w-[50%] m-2 md:m-auto">
       <div className="image-container w-[220px] h-[220px] md:w-[360px] md:h-[360px] object-cover">
-        <img className='h-full w-full' src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/flydro_logo_png_1.png" alt="" />
+        <img className='h-full w-full' loading="lazy" src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/flydro_logo_png_1.png" alt="" />
       </div>
       </div>
       <div className="flex flex-col gap-2 sm:gap-4 md:gap-16 w-full md:w-[70%] text-white">

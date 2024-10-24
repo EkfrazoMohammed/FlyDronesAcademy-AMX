@@ -28,7 +28,7 @@ const Navbar = () => {
           <Link to="/">
             <img
               className="h-auto w-auto object-cover"
-              src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/flydro_logo_png_1.png"
+              loading="lazy" src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/flydro_logo_png_1.png"
               alt=""
             />
           </Link>

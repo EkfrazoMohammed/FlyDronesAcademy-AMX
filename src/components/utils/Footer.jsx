@@ -7,8 +7,8 @@ const Footer = () => {
               <div className='max-w-[1280px] w-full'>
                 <div className="flex justify-between items-center">
                   <div className="flex flex-col gap-2 w-[100%] text-secondaryColor">
-                      <div className="text-center text-[1.6rem] md:text-[2rem] font-medium">FlyDro Academy Location</div>
-                    <div className="text-center text-[1rem] md:text-[1.1rem] font-medium">Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, modi..</div>
+                      <div className="text-center text-[1.6rem] md:text-[2rem] font-medium">FlyDro Academy</div>
+                    <div className="text-center text-[1rem] md:text-[1.1rem] font-medium"> &copy; 2024 El Imperio Automations. All Rights Reserved</div>
                    </div>
                 </div>
               </div>
