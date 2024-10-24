@@ -21,9 +21,12 @@ const CourseDetails = () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchData(); // Fetch data when the component mounts
-  // }, [id]); // Re-run if id changes
+  useEffect(() => {
+    fetchData(); // Fetch data when the component mounts
+  
+    window.scrollTo(0, 0); // Scroll to top of the page
+  }, [id]); // Re-run if id changes
+
 
   return (
       <>

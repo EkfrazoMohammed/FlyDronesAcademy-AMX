@@ -1,43 +1,52 @@
 import React from 'react'
 import Divider from '../utils/Divider'
 import Stepper from '../utils/Stepper'
+import img1 from "../../assets/1 (20).png"; 
+import img2 from "../../assets/1 (19).png"; 
+import img3 from "../../assets/1 (6).png"; 
+
+import doc1 from "../../assets/1 (1).png"; 
+import doc2 from "../../assets/1 (3).png"; 
+import doc3 from "../../assets/1 (30).png"; 
+import doc4 from "../../assets/1 (31).png"; 
+import doc5 from "../../assets/1 (32).png"; 
 
 const Introduction = () => {
   const data = [
     {
-      image: 'https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit..'
+      image: img1,
+      text: 'Not less than 18 years of age and not more than 65 years of age.'
     },
     {
-      image: 'https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo ducimus saep.'
+      image:img2,
+      text: 'Has passed class 10th examination or its equivalent from a recognized board.'
     },
     {
-      image: 'https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg',
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo ducimus saep.'
+      image:img3,
+      text: 'Has successfully completed such training from an Authorised Remote Pilot Training Organization'
     },
   ]
 
   const documents = [
     {
-      image: 'https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg',
-      text: 'Lorem ipsum dolor '
+      image: doc2,
+      text: 'Application Form'
     },
     {
-      image: 'https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg',
-      text: 'Lorem ipsum dolor '
+      image: doc1,
+      text: 'ID Proof (Aadhaar Card)'
     },
     {
-      image: 'https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg',
-      text: 'Lorem ipsum dolor '
+      image:doc5,
+      text: 'Address Proof (Passport/DL/Voter ID)'
     },
     {
-      image: 'https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg',
-      text: 'Lorem ipsum dolor '
+      image: doc4,
+      text: 'Medical Fitness Certificate'
     },
     {
-      image: 'https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg',
-      text: 'Lorem ipsum dolor '
+      image: doc3,
+      text: '10th Standard Marks card'
     },
   ]
 
@@ -75,9 +84,9 @@ const Introduction = () => {
                 return (<>
                   <div className='flex gap-4'>
                     <div className="text-[1.8rem] font-medium">
-                      <img className="w-[120px] h-[120px]" loading="lazy" src={value.image} alt={value.image} />
+                      <img className="w-[160px] h-[160px]" loading="lazy" src={value.image} alt={value.image} />
                     </div>
-                    <div className="text-[1.2rem] font-medium max-w-full md:max-w-full flex justify-center items-center">
+                    <div className="text-[1.6rem] font-medium max-w-full md:max-w-full flex justify-center items-center">
                       {value.text}
                     </div>
                   </div>
@@ -98,7 +107,7 @@ const Introduction = () => {
               documents.map((value, index) => {
                 return (<>
                   <div className='flex flex-col gap-2'>
-                      <img className="w-[260px] h-[220px] " loading="lazy" src={value.image} alt={value.image} />
+                      <img className="w-[220px] h-[220px] " loading="lazy" src={value.image} alt={value.image} />
                       <div className='text-primaryColor text-[1.2rem] text-center'>{value.text}</div>
                   </div>
                 </>)
