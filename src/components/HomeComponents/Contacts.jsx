@@ -12,7 +12,6 @@ const Contacts = () => {
             <div className="flex justify-between items-center">
               <div className="flex flex-col gap-2 w-[100%] text-secondaryColor">
                   <div className="text-[1.6rem] md:text-[2rem] md:text-leftfont-medium">Contact Us</div>
-             
                 <div className='flex gap-4'>
                 <div className="text-[1.8rem] font-medium">
                   <img className="w-[30px] h-[30px]" src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg" alt="" />

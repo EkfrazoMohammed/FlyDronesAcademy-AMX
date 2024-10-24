@@ -1,5 +1,4 @@
 import { useState, useEffect,useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Modal from '../utils/Modal';
 import CalendarComponent from '../utils/Calendar';
@@ -353,7 +352,7 @@ const handleSelectEvent = async (event) => {
               </div>
 
               <div className="text-[1rem] font-medium flex gap-2 md:gap-4">
-                <button className='border border-primaryColor text-primaryColor bg-transparent hover:bg-primaryColor hover:text-secondaryColor transition-all rounded-full py-0 px-3'><Link to={`/course/${item.id}`}>Learn More</Link></button>
+                <button className='border border-primaryColor text-primaryColor bg-transparent hover:bg-primaryColor hover:text-secondaryColor transition-all rounded-full py-0 px-3'>Learn More</button>
                 <button className='border border-primaryColor text-primaryColor bg-transparent hover:bg-primaryColor hover:text-secondaryColor transition-all rounded-full py-0 px-3' onClick={() => handleOpenModal(item)}>Book a Slot</button>
               </div>
             </div>
