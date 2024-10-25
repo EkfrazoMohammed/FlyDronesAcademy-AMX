@@ -39,6 +39,8 @@ const IndustryApplications = () => {
         <img
           className="w-[120px] h-[120px] md:w-[160px] md:h-[160px]"
           loading="lazy" src={item.image}
+            srcSet={`${item.image} 160w`}
+            sizes="(max-width: 600px) 120px, 160px"
           alt=""
         />
       </div>

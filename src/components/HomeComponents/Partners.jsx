@@ -36,7 +36,10 @@ const Partners = () => {
                     <>
                <div key ={index} className="py-3 px-3 md:py-6 md:px-6 text-[1.2rem]">
               <div className="imageContainer w-full transition-transform duration-200 transform ">
-                <img className="w-[140px] h-[140px] filter grayscale transition-all duration-200 hover:grayscale-0" loading="lazy" src={item.image} alt="" />
+                <img className="w-[140px] h-[140px] filter grayscale transition-all duration-200 hover:grayscale-0" 
+                  srcSet={`${item.image} 160w`}
+            sizes="(max-width: 600px) 120px, 160px"
+                loading="lazy" src={item.image} alt="" />
               </div>
             </div>
                     </>

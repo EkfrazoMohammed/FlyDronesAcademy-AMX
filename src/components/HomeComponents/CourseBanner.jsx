@@ -153,12 +153,56 @@ const verifyOtp = async (type) => {
   const [courses, setCourses] = useState([]); // State to store courses data
   const [filteredSlots, setFilteredSlots] = useState([]); // State to store courses data
   const [orderData,setOrderData]=useState([])
+  const myGetData=[
+    {
+        "id": 1,
+        "course_name": "DGCA Approved Pilot Training Course",
+        "description": "<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.</p>",
+        "course_duration": "10",
+        "amount": "15000",
+        "is_tax_included": true,
+        "is_active": true,
+        "slots": [
+            {
+                "id": 1,
+                "slot_name": "Morning Slot",
+                "start_date": "2024-01-01T14:30:00+05:30",
+                "end_date": "2024-01-01T17:30:00+05:30",
+                "max_candidate": 30,
+                "is_active": true,
+                "seat_available": 30,
+                "booked_seats": 0
+            }
+        ],
+        "curriculum": [
+            {
+                "id": 1,
+                "day": 1,
+                "topics": [
+                    "Introduction",
+                    "Basic Concepts"
+                ],
+                "description": "<p>Day 1 description</p>"
+            },
+            {
+                "id": 2,
+                "day": 2,
+                "topics": [
+                    "Intermediate Concepts",
+                    "Practical Examples"
+                ],
+                "description": "<p>Day 2 description</p>"
+            }
+        ]
+    }
+]
   // Fetch course data from API
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/course/');
-        setCourses(response.data);  // Set the fetched courses in state
+        // const response = await axios.get('http://localhost:8000/api/course/');
+        // setCourses(response.data);  // Set the fetched courses in state
+        setCourses(myGetData)
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -342,7 +386,7 @@ const handleSelectEvent = async (event) => {
                 <div className=" h-8 w-8 flex justify-center items-center text-[.4rem] md:text-[1rem] ring-primaryColor border-primaryColor border rounded-full mb-3 font-semibold"> {item.id}</div>
                 
                 </div>
-                <div className="text-justify text-[1rem] md:text-[1.4rem] font-medium course_description" >{item.description}</div>
+                <div className="text-justify text-[1rem] md:text-[1.4rem] font-medium course_description"   dangerouslySetInnerHTML={{ __html: item.description }}></div>
                 {/* <div className="text-[1rem] md:text-[1.4rem] font-medium course_description" dangerouslySetInnerHTML={{ __html: item.description }} ></div> */}
               </div>
               <div className="text-[1.2rem] md:text-[2rem] font-bold">Course Duration : {item.course_duration}</div>
@@ -419,7 +463,7 @@ const handleSelectEvent = async (event) => {
         }`}
         disabled={mobileVerified}
       >
-        {mobileVerified ? '✅ Verified' : 'Verify'}
+        {mobileVerified ? 'Verified' : 'Verify'}
       </button>
     </div>
   )}
