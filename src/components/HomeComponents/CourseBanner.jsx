@@ -1,4 +1,5 @@
 import { useState, useEffect,useMemo } from 'react';
+import { API } from '../../api/apirequest';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Modal from '../utils/Modal';
@@ -44,7 +45,7 @@ const CourseBanner = () => {
 
   const handleSendMobileOtp = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/api/send_otp/', {
+      const response = await API.post('send_otp/', {
         mobile: formData.mobile_number,
       });
       console.log(response.data.message); // "OTP sent successfully"
@@ -95,7 +96,7 @@ const handleSendEmailOtp = async () => {
   setIsEmailOtpSent(true);
   // Your API call to send OTP here, e.g.:
   try {
-    await axios.post('http://localhost:8000/api/send_otp/', {
+    await API.post('send_otp/', {
       email: formData.email,
     });
     console.log("OTP sent successfully");
@@ -107,7 +108,7 @@ const handleSendEmailOtp = async () => {
 const verifyOtp = async (type) => {
   try {
     if (type === 'email') {
-      const response = await axios.post('http://localhost:8000/api/verify_otp/', {
+      const response = await API.post('verify_otp/', {
         email: formData.email,
         otp: otpEmail,
       });
@@ -122,7 +123,7 @@ const verifyOtp = async (type) => {
       }
     }
     else if (type === "mobile") {
-      const response = await axios.post('http://localhost:8000/api/verify_otp/', {
+      const response = await API.post('verify_otp/', {
         mobile: formData.mobile_number,
         otp: otpMobile,
       });
@@ -200,9 +201,9 @@ const verifyOtp = async (type) => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // const response = await axios.get('http://localhost:8000/api/course/');
-        // setCourses(response.data);  // Set the fetched courses in state
-        setCourses(myGetData)
+        const response = await API.get('course/');
+        setCourses(response.data);  // Set the fetched courses in state
+        // setCourses(myGetData)
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -331,7 +332,7 @@ const handleSubmit = async (e) => {
   
   
   try {
-    const response = await axios.post('http://localhost:8000/api/course_register/', apiData, {
+    const response = await API.post('course_register/', apiData, {
       headers: {
         'Content-Type': 'application/json',
       },
