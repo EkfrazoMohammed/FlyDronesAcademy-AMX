@@ -1,4 +1,5 @@
 import { useState, useEffect,useMemo } from 'react';
+import { API } from '../../api/apirequest';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Modal from '../utils/Modal';
@@ -14,6 +15,7 @@ const CourseBanner = () => {
     email: '',
     address: '',
     organization_name: '',
+    gstin:''
   });
 
   const [errorMessages, setErrorMessages] = useState({
@@ -21,6 +23,7 @@ const CourseBanner = () => {
     mobile_number: '',
     email: '',
     address: '',
+    gstin:''
   });
 
 
@@ -41,10 +44,14 @@ const CourseBanner = () => {
   const [otpTimerEmail, setOtpTimerEmail] = useState(60);
   const [mobileVerified, setMobileVerified] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
+  const isValidGstin = (gstin) => {
+    const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
+    return gstinRegex.test(gstin);
+  };
 
   const handleSendMobileOtp = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/api/send_otp/', {
+      const response = await API.post('send_otp/', {
         mobile: formData.mobile_number,
       });
       console.log(response.data.message); // "OTP sent successfully"
@@ -95,7 +102,7 @@ const handleSendEmailOtp = async () => {
   setIsEmailOtpSent(true);
   // Your API call to send OTP here, e.g.:
   try {
-    await axios.post('http://localhost:8000/api/send_otp/', {
+    await API.post('send_otp/', {
       email: formData.email,
     });
     console.log("OTP sent successfully");
@@ -107,7 +114,7 @@ const handleSendEmailOtp = async () => {
 const verifyOtp = async (type) => {
   try {
     if (type === 'email') {
-      const response = await axios.post('http://localhost:8000/api/verify_otp/', {
+      const response = await API.post('verify_otp/', {
         email: formData.email,
         otp: otpEmail,
       });
@@ -122,7 +129,7 @@ const verifyOtp = async (type) => {
       }
     }
     else if (type === "mobile") {
-      const response = await axios.post('http://localhost:8000/api/verify_otp/', {
+      const response = await API.post('verify_otp/', {
         mobile: formData.mobile_number,
         otp: otpMobile,
       });
@@ -153,12 +160,14 @@ const verifyOtp = async (type) => {
   const [courses, setCourses] = useState([]); // State to store courses data
   const [filteredSlots, setFilteredSlots] = useState([]); // State to store courses data
   const [orderData,setOrderData]=useState([])
+
   // Fetch course data from API
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/course/');
+        const response = await API.get('course/');
         setCourses(response.data);  // Set the fetched courses in state
+        // setCourses(myGetData)
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -208,6 +217,7 @@ const allDatesData = courses.map(course => ({
         email: '',
         address: '',
         organization_name: '',
+        gstin:''
     });
     setOtpMobile('');
     setOtpEmail('');
@@ -238,18 +248,19 @@ const handleOpenSecondModal = () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   
-  e.preventDefault();
-    
   // Reset error messages
   setErrorMessages({
     name: '',
     mobile_number: '',
     email: '',
     address: '',
+    gstin:''
   });
 
   let hasError = false;
   
+   
+
   // Validate form fields and set error messages
   if (!formData.name) {
     setErrorMessages((prev) => ({ ...prev, name: 'Name is required.' }));
@@ -271,6 +282,20 @@ const handleSubmit = async (e) => {
     hasError = true;
   }
 
+  // Validate GSTIN if provided
+  if (formData.gstin && !isValidGstin(formData.gstin)) {
+    setErrorMessages((prev) => ({ ...prev, gstin: '*Invalid GSTIN number' }));
+    hasError = true;
+    localStorage.removeItem("GSTIN");
+    return;
+  }
+
+  // Store GSTIN in localStorage if provided
+  if (formData.gstin && isValidGstin(formData.gstin)) {
+    localStorage.setItem("GSTIN", formData.gstin);
+  }
+
+    
   if (hasError) return; // Stop submission if there are validation errors
 
   // setIsFirstModalOpen(false);
@@ -282,12 +307,14 @@ const handleSubmit = async (e) => {
     address: formData.organization_name, // Assuming organization name is used as address
     phone_number: formData.mobile_number,
     email: formData.email,
-    organization: formData.organization_name || '', // If optional, make it an empty string if not provided
+    organization: formData.organization_name || '',
+    // gstin: formData.gstin,
+     // If optional, make it an empty string if not provided
   };
   
   
   try {
-    const response = await axios.post('http://localhost:8000/api/course_register/', apiData, {
+    const response = await API.post('course_register/', apiData, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -342,7 +369,7 @@ const handleSelectEvent = async (event) => {
                 <div className=" h-8 w-8 flex justify-center items-center text-[.4rem] md:text-[1rem] ring-primaryColor border-primaryColor border rounded-full mb-3 font-semibold"> {item.id}</div>
                 
                 </div>
-                <div className="text-justify text-[1rem] md:text-[1.4rem] font-medium course_description" >{item.description}</div>
+                <div className="text-justify text-[1rem] md:text-[1.4rem] font-medium course_description"   dangerouslySetInnerHTML={{ __html: item.description }}></div>
                 {/* <div className="text-[1rem] md:text-[1.4rem] font-medium course_description" dangerouslySetInnerHTML={{ __html: item.description }} ></div> */}
               </div>
               <div className="text-[1.2rem] md:text-[2rem] font-bold">Course Duration : {item.course_duration}</div>
@@ -419,7 +446,7 @@ const handleSelectEvent = async (event) => {
         }`}
         disabled={mobileVerified}
       >
-        {mobileVerified ? '✅ Verified' : 'Verify'}
+        {mobileVerified ? 'Verified' : 'Verify'}
       </button>
     </div>
   )}
@@ -511,6 +538,19 @@ const handleSelectEvent = async (event) => {
           onChange={handleChange}
           className="border rounded py-1 px-2 w-full"
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">GSTIN number (optional)</label>
+        <input
+          type="text"
+          name="gstin"
+          value={formData.gstin}
+          onChange={handleChange}
+          className="border rounded py-1 px-2 w-full"
+        />
+         {errorMessages.gstin && <div className="text-red-600 text-sm">{errorMessages.gstin}</div>}
+     
       </div>
 
       <button

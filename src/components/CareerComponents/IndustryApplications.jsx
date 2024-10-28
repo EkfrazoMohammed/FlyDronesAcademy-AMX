@@ -35,7 +35,7 @@ const IndustryApplications = () => {
       <div className="imageContainer md:w-full flex justify-center items-center">
         <img
           className="w-[120px] h-[120px] md:w-[320px] md:h-[260px]"
-          loading="lazy" src={item.image}
+            src={item.image}
           alt=""
         />
       </div>

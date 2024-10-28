@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { API } from '../../api/apirequest';
 import axios from 'axios';
 import Banner from './Banner';
-import Divider from '../utils/Divider';
 import Introduction from './Introduction';
 import CourseOutlines from './CourseOutlines';
 
@@ -13,7 +13,7 @@ const CourseDetails = () => {
   const fetchData = async () => {
     try {
       // Use the id in the API request
-      const response = await axios.get(`http://localhost:8000/api/course/${id}/`);
+      const response = await API.get(`course/${id}/`);
       setCourseData(response.data); // Set the response data in state
       console.log(response.data);
     } catch (error) {
