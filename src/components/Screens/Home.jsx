@@ -1,8 +1,11 @@
+import React, { Suspense, lazy } from 'react';
+
+const IndustryApplications = lazy(() => import('../HomeComponents/IndustryApplications'));
 import Banner from '../HomeComponents/Banner';
 import MidSection from '../HomeComponents/MidSection';
 import CourseBanner from '../HomeComponents/CourseBanner';
 import Descriptions from '../HomeComponents/Descriptions';
-import IndustryApplications from '../HomeComponents/IndustryApplications';
+// import IndustryApplications from '../HomeComponents/IndustryApplications';
 import Locations from '../HomeComponents/Locations';
 import FAQ from '../HomeComponents/FAQ';
 import Partners from '../HomeComponents/Partners';
@@ -23,7 +26,10 @@ const Home = () => {
         <Descriptions />
       </div>
       <div id="industry-applications">
+      <Suspense fallback={<div>Loading Applications...</div>}>
         <IndustryApplications />
+      </Suspense>
+        {/* <IndustryApplications /> */}
       </div>
       <div id="faq">
         <FAQ />

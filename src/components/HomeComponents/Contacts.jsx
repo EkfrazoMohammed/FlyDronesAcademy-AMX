@@ -14,20 +14,20 @@ const Contacts = () => {
                   <div className="text-[1.6rem] md:text-[2rem] md:text-leftfont-medium">Contact Us</div>
                 <div className='flex gap-4'>
                 <div className="text-[1.8rem] font-medium">
-                  <img className="w-[30px] h-[30px]" loading="lazy" src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg" alt="" />
+                  <img className="w-[30px] h-[30px]"   src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_01.jpg" alt="" />
                   </div>
                 <div className="text-[1.2rem] font-medium max-w-full md:max-w-[50%]]"><a href="mailto:info@flydro.in" className="hover:text-yellow-100">info@flydro.in</a></div>
                 </div>
                 <div className='flex gap-4'>
                 <div className="text-[1.8rem] font-medium">
-                  <img className="w-[30px] h-[30px]" loading="lazy" src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_02.png" alt="" />
+                  <img className="w-[30px] h-[30px]"   src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_02.png" alt="" />
                   </div>
                 <div className="text-[1.2rem] font-medium max-w-full md:max-w-[50%]"><a href="tel:+916363640029" className="hover:text-yellow-100">+91 6363640029</a> | <a href="tel:+919341253607" className="hover:text-yellow-100">+91 9341253607</a></div>
                 </div>
 
                 <div className='flex gap-4'>
                 <div className="text-[1.8rem] font-medium">
-                  <img className="w-[30px] h-[30px]" loading="lazy" src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_03.png" alt="" />
+                  <img className="w-[30px] h-[30px]"   src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/icon_03.png" alt="" />
                   </div>
                 <div className="text-[1.2rem] flex flex-col gap-1 text-justifyfont-medium max-w-full md:max-w-[50%]">
                   <span>

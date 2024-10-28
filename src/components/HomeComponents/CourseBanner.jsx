@@ -15,6 +15,7 @@ const CourseBanner = () => {
     email: '',
     address: '',
     organization_name: '',
+    gstin:''
   });
 
   const [errorMessages, setErrorMessages] = useState({
@@ -22,6 +23,7 @@ const CourseBanner = () => {
     mobile_number: '',
     email: '',
     address: '',
+    gstin:''
   });
 
 
@@ -42,6 +44,10 @@ const CourseBanner = () => {
   const [otpTimerEmail, setOtpTimerEmail] = useState(60);
   const [mobileVerified, setMobileVerified] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
+  const isValidGstin = (gstin) => {
+    const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
+    return gstinRegex.test(gstin);
+  };
 
   const handleSendMobileOtp = async () => {
     try {
@@ -154,49 +160,7 @@ const verifyOtp = async (type) => {
   const [courses, setCourses] = useState([]); // State to store courses data
   const [filteredSlots, setFilteredSlots] = useState([]); // State to store courses data
   const [orderData,setOrderData]=useState([])
-  const myGetData=[
-    {
-        "id": 1,
-        "course_name": "DGCA Approved Pilot Training Course",
-        "description": "<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.</p>",
-        "course_duration": "10",
-        "amount": "15000",
-        "is_tax_included": true,
-        "is_active": true,
-        "slots": [
-            {
-                "id": 1,
-                "slot_name": "Morning Slot",
-                "start_date": "2024-01-01T14:30:00+05:30",
-                "end_date": "2024-01-01T17:30:00+05:30",
-                "max_candidate": 30,
-                "is_active": true,
-                "seat_available": 30,
-                "booked_seats": 0
-            }
-        ],
-        "curriculum": [
-            {
-                "id": 1,
-                "day": 1,
-                "topics": [
-                    "Introduction",
-                    "Basic Concepts"
-                ],
-                "description": "<p>Day 1 description</p>"
-            },
-            {
-                "id": 2,
-                "day": 2,
-                "topics": [
-                    "Intermediate Concepts",
-                    "Practical Examples"
-                ],
-                "description": "<p>Day 2 description</p>"
-            }
-        ]
-    }
-]
+
   // Fetch course data from API
   useEffect(() => {
     const fetchCourses = async () => {
@@ -253,6 +217,7 @@ const allDatesData = courses.map(course => ({
         email: '',
         address: '',
         organization_name: '',
+        gstin:''
     });
     setOtpMobile('');
     setOtpEmail('');
@@ -283,18 +248,19 @@ const handleOpenSecondModal = () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   
-  e.preventDefault();
-    
   // Reset error messages
   setErrorMessages({
     name: '',
     mobile_number: '',
     email: '',
     address: '',
+    gstin:''
   });
 
   let hasError = false;
   
+   
+
   // Validate form fields and set error messages
   if (!formData.name) {
     setErrorMessages((prev) => ({ ...prev, name: 'Name is required.' }));
@@ -316,6 +282,20 @@ const handleSubmit = async (e) => {
     hasError = true;
   }
 
+  // Validate GSTIN if provided
+  if (formData.gstin && !isValidGstin(formData.gstin)) {
+    setErrorMessages((prev) => ({ ...prev, gstin: '*Invalid GSTIN number' }));
+    hasError = true;
+    localStorage.removeItem("GSTIN");
+    return;
+  }
+
+  // Store GSTIN in localStorage if provided
+  if (formData.gstin && isValidGstin(formData.gstin)) {
+    localStorage.setItem("GSTIN", formData.gstin);
+  }
+
+    
   if (hasError) return; // Stop submission if there are validation errors
 
   // setIsFirstModalOpen(false);
@@ -327,7 +307,9 @@ const handleSubmit = async (e) => {
     address: formData.organization_name, // Assuming organization name is used as address
     phone_number: formData.mobile_number,
     email: formData.email,
-    organization: formData.organization_name || '', // If optional, make it an empty string if not provided
+    organization: formData.organization_name || '',
+    // gstin: formData.gstin,
+     // If optional, make it an empty string if not provided
   };
   
   
@@ -556,6 +538,19 @@ const handleSelectEvent = async (event) => {
           onChange={handleChange}
           className="border rounded py-1 px-2 w-full"
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">GSTIN number (optional)</label>
+        <input
+          type="text"
+          name="gstin"
+          value={formData.gstin}
+          onChange={handleChange}
+          className="border rounded py-1 px-2 w-full"
+        />
+         {errorMessages.gstin && <div className="text-red-600 text-sm">{errorMessages.gstin}</div>}
+     
       </div>
 
       <button

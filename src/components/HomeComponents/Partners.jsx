@@ -39,7 +39,7 @@ const Partners = () => {
                 <img className="w-[140px] h-[140px] filter grayscale transition-all duration-200 hover:grayscale-0" 
                   srcSet={`${item.image} 160w`}
             sizes="(max-width: 600px) 120px, 160px"
-                loading="lazy" src={item.image} alt="" />
+                  src={item.image} alt="" />
               </div>
             </div>
                     </>

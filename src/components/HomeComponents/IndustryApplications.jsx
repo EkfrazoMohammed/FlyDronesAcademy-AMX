@@ -1,26 +1,20 @@
-import React from 'react'
-import img1 from "../../assets/applications (1).png";  
-import img2 from "../../assets/applications (2).png";  
-import img3 from "../../assets/applications (3).png";  
-import img4 from "../../assets/applications (4).png";  
-
 const IndustryApplications = () => {
 
     const data=[
         {
-          image:img3,
+          image:"https://fibregridstorage.blr1.cdn.digitaloceanspaces.com/Flydro_web_images/applications (1).png",
           text:"Aerial Survey & Mapping"
         },
         {
-          image:img2,
-            text:"Photography & Videography"
+          image:"https://fibregridstorage.blr1.cdn.digitaloceanspaces.com/Flydro_web_images/applications (2).png",
+          text:"Photography & Videography"
           },
           {
-            image:img4,
+            image:"https://fibregridstorage.blr1.cdn.digitaloceanspaces.com/Flydro_web_images/applications (3).png",
             text:"Agriculture"
           },
           {
-            image:img1,
+            image:"https://fibregridstorage.blr1.cdn.digitaloceanspaces.com/Flydro_web_images/applications (4).png",
             text:"Hobby & Recreation"
       },
     ]
@@ -36,13 +30,22 @@ const IndustryApplications = () => {
       className="py-4 px-2 md:py-4 md:px-4 text-[1.2rem]  w-[calc(50%)] md:w-auto"
     >
       <div className="imageContainer md:w-full flex justify-center items-center">
-        <img
+        {/* <img
           className="w-[120px] h-[120px] md:w-[160px] md:h-[160px]"
-          loading="lazy" src={item.image}
+            src={item.image}
             srcSet={`${item.image} 160w`}
             sizes="(max-width: 600px) 120px, 160px"
           alt=""
-        />
+        /> */}
+        <img
+  loading="lazy" // Enables lazy loading
+  className="w-[120px] h-[120px] md:w-[160px] md:h-[160px]"
+  src={item.image}
+  srcSet={`${item.image} 160w`}
+  sizes="(max-width: 600px) 120px, 160px"
+  alt={item.text}
+/>
+
       </div>
       <div className="textContent text-[1rem] md:text-[1.4rem]">{item.text}</div>
     </div>

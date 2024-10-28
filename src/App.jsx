@@ -5,19 +5,31 @@ import Home from './components/Screens/Home';
 import Careers from './components/Screens/Careers';
 import Contacts from './components/HomeComponents/Contacts';
 import CourseDetails from './components/CourseComponents/CourseDetails';
+import ComingSoon from './components/utils/ComingSoon';
+import { useState } from 'react';
 
 const App = () => {
+
+  const [live,setLive]=useState(false)
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/careers" element={<Careers />} />
-        <Route path="/course/:id" element={<CourseDetails />} />
-      </Routes>
-      <Contacts />
-      <Footer />
-    </Router>
+    <>
+    {live ? <>
+       <Router>
+       <Navbar />
+       <Routes>
+         <Route path="/" element={<Home />} />
+         <Route path="/careers" element={<Careers />} />
+         <Route path="/course/:id" element={<CourseDetails />} />
+       </Routes>
+       <Contacts />
+       <Footer />
+     </Router>
+    </>:<>
+    <ComingSoon />
+    </>
+    }
+    </>
+ 
   );
 };
 

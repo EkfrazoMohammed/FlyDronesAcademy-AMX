@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = `http://flydro.in/api/`;
+const baseURL = `https://flydro.in/api/`;
 const API = axios.create({
   baseURL,
 });
