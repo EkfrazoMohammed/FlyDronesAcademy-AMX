@@ -349,7 +349,7 @@ const handleSelectEvent = async (event) => {
 }
  
   return (
-    <div className="relative min-h-[650px] md:min-h-[80vh] color-primaryColor">
+    <div className="relative min-h-[720px] md:min-h-[80vh] color-primaryColor">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"

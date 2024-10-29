@@ -11,6 +11,11 @@ const JobListings = () => {
           title: 'DGCA Approved Pilot - Instructor',
           description: '',
         },
+        {
+          id: 2,
+          title: 'Developer',
+          description: '',
+        },
       ],
     },
     {
@@ -80,10 +85,10 @@ const JobListings = () => {
   return (
     <>
       <div className="text-primaryColor">
-        <div className="max-w-[1280px] heading px-8 py-2 text-[2rem] bg-white w-full m-auto">
+        <div className="max-w-[1280px] heading px-8 py-2 text-[1.4rem] md:text-[2rem] bg-white w-full m-auto">
           Start doing work that matters.
         </div>
-        <div className="max-w-[1280px] heading px-8 py-2 text-[1.4rem] bg-white w-full m-auto">
+        <div className="max-w-[1280px] heading px-8 py-2 text-[1.2rem] md:text-[1.4rem] bg-white w-full m-auto">
           Our philosophy is simple – Hire passionate people.
         </div>
         <div className="line h-[1.5px] bg-gray-300"></div>
@@ -93,10 +98,10 @@ const JobListings = () => {
             <div className="flex flex-col justify-between items-center gap-2 md:gap-4 max-w-[1280px] m-auto">
               {data.map((item) => {
                 return (
-                  <div key={item.id} className="w-full flex flex-col md:flex-row justify-between gap-4 md:gap-10 items-start py-2 px-4 md:py-6 md:px-8">
-                    <div className="department_name text-[1.1rem] md:text-[1.8rem]">{item.department}</div>
+                  <div key={item.id} className="w-full flex flex-col md:flex-row justify-between gap-6 md:gap-10 items-start py-2 px-4 md:py-6 md:px-8">
+                    <div className="department_name text-[1.1rem] md:text-[1.8rem] px-2">{item.department}</div>
 
-                    <div className="role_cards_container flex flex-col gap-4 md:gap-8">
+                    <div className="role_cards_container flex flex-col gap-6 md:gap-8">
                       {item.roles.map((role) => {
                         return (
                           <div key={role.id} className="role_cards text-[1.1rem] flex gap-2 flex-col  border rounded-[20px] w-[350px] md:w-[500px] h-auto p-3 md:p-6">

@@ -2,7 +2,7 @@ import React from 'react'
 
 const Divider = ({text}) => {
   return (
-    <div className='text-primaryColor h-[10vh] md:h-[10vh] bg-white p-2 md:p-4  md:m-auto'
+    <div className='text-primaryColor h-[40px] md:h-[10vh] bg-white p-2 md:p-4  md:m-auto '
     style={{
         background: "linear-gradient(to right, rgb(24, 95, 171) 48%,transparent, rgb(248, 218, 90))",
         backgroundSize: 'cover',
