@@ -22,9 +22,9 @@ const Navbar = () => {
 
   return (
 
-    <div className="bg-green max-h-[10vh] h-[10vh] text-black flex md:flex-row md:px-32 md:py-3 gap-3 md:gap-8">
-      <div className="flex justify-between w-full sm:w-auto sm:justify-start px-3">
-        <div className="image-container w-[60px] h-[60px]">
+    <div className="bg-green max-h-[90px] h-[90px] max-w-[1280px] m-0 text-black flex md:flex-row md:px-32 md:py-3 gap-3 md:gap-8">
+      <div className="flex justify-between w-full  items-center sm:w-auto sm:justify-start px-3">
+        <div className="image-container w-[65px] h-[65px] flex justify-center items-center sm:m-0 md:m-auto">
           <Link to="/">
             <img
               className="h-auto w-auto object-cover"

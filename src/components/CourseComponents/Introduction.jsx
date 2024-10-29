@@ -1,6 +1,4 @@
-import React from 'react'
 import Divider from '../utils/Divider'
-import Stepper from '../utils/Stepper'
 import img1 from "../../assets/1 (20).png"; 
 import img2 from "../../assets/1 (19).png"; 
 import img3 from "../../assets/1 (6).png"; 
@@ -71,10 +69,10 @@ const Introduction = () => {
 
           <div className="paragraphs max-w-[1280px] py-2 px-2 md:py-6 md:px-12 text-justify m-auto">
 
-            <div className='text-primaryColor text-[2rem] font-semibold text-center'>
+            <div className='text-primaryColor text-[1.4rem] md:text-[2rem] font-semibold text-center'>
               An Individual is eligible to obtain a Remote Pilot Certificate
             </div>
-            <div className='text-primaryColor text-[2rem] font-semibold text-center'>
+            <div className='text-primaryColor text-[1.4rem] md:text-[2rem] font-semibold text-center'>
               if He/She is
             </div>
 
@@ -84,9 +82,9 @@ const Introduction = () => {
                 return (<>
                   <div className='flex gap-4'>
                     <div className="text-[1.8rem] font-medium">
-                      <img className="w-[160px] h-[160px]"   src={value.image} alt={value.image} />
+                      <img className="w-[180px] h-[120px] md:w-[160px] md:h-[160px]"   src={value.image} alt={value.image} />
                     </div>
-                    <div className="text-[1.6rem] font-medium max-w-full md:max-w-full flex justify-center items-center">
+                    <div className="text-[1.1rem] md:text-[1.6rem] font-medium max-w-full md:max-w-full flex justify-center items-center">
                       {value.text}
                     </div>
                   </div>
@@ -101,14 +99,14 @@ const Introduction = () => {
           {/* Documents start*/}
           <Divider text='Document Required' />
 
-          <div className="paragraphs flex items-center justify-center gap-16 flex-wrap max-w-[1280px] py-2 px-2 md:py-6 md:px-12 text-justify m-auto">
+          <div className="paragraphs flex items-center justify-center gap-4 md:gap-16 max-w-[1280px] py-2 px-2 md:py-6 md:px-12 text-justify flex-wrap m-auto">
             {/* dynamic start*/}
             {
               documents.map((value, index) => {
                 return (<>
-                  <div className='flex flex-col gap-2'>
-                      <img className="w-[220px] h-[220px] "   src={value.image} alt={value.image} />
-                      <div className='text-primaryColor text-[1.2rem] text-center'>{value.text}</div>
+                  <div className='flex flex-col gap-2  w-[calc(42%)] md:w-[calc(28%)]'>
+                      <img className=" w-[120px] h-[120px] md:w-[220px] md:h-[220px] m-auto"   src={value.image} alt={value.image} />
+                      <div className='text-primaryColor text-[1rem] md:text-[1.2rem] text-center'>{value.text}</div>
                   </div>
                 </>)
               })

@@ -25,7 +25,7 @@ const WhyWorkWithUs = () => {
        <div className="heading p-4 text-[2rem] flex justify-center items-center text-center m-0 bg-white w-full">Why Work With Us ?
        </div>
 
-    <div className="relative h-[650px] md:h-[60vh] color-primaryColor">
+    <div className="relative h-[400px] md:h-[60vh] color-primaryColor">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-contain bg-center"
@@ -36,11 +36,11 @@ const WhyWorkWithUs = () => {
       <div className="absolute inset-0 bg-black opacity-5"></div>
       {/* Text Content */}
       <div className="relative banner-text-container">
-    <div className="h-[400px] md:h-[60vh] flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16  md:px-32 py-2 md:py-8">
+    <div className="h-[400px] md:h-[60vh] flex flex-col md:flex-row justify-center items-center flex-wrap gap-6 md:gap-16  md:px-32 py-2 md:py-8">
       {data.map((item, index)=>{
         return (
           <div key={index}>
-            <img   src={item.image} alt={item.image} className="w-[260px] h-[260px] object-cover" />
+            <img   src={item.image} alt={item.image} className="w-[180px] h-[180px] md:w-[260px] md:h-[260px] object-cover" />
           </div>
         )
       })}

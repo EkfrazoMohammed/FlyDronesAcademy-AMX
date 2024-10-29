@@ -56,7 +56,7 @@ const FAQ = () => {
           backgroundAttachment: 'fixed', // This will make the background image remain fixed
         }}
           >
-          <div className="paragraphs py-4 px-4 md:py-6 md:px-12 text-[1.5rem] text-left w-full flex items-center justify-center " >
+          <div className="paragraphs py-4 px-4 md:py-6 md:px-10 text-[1.5rem] text-left w-full flex items-center justify-center " >
 
           <div className='max-w-[1280px] w-full'>
           <Collapse items={items} defaultActiveKey={['1']} onChange={onChange} />

@@ -1,30 +1,24 @@
-import React from 'react'
-import img1 from "../../assets/1 (28).png";  
-import img2 from "../../assets/1 (28).png"; 
-import img3 from "../../assets/1 (28).png"; 
-import img4 from "../../assets/1 (28).png"; 
 const Partners = () => {
-  
-    
+ 
         const data=[
-            {
-              image:img1,
-              text:"Aerial Survey & Mapping"
-            },
-            {
-              image:img2,
-              text:"Lorem ipsum dolor sit"
-            },
-            {
-              image:img3,
-              text:"Lorem ipsum dolor sit"
-            },
-            {
-              image:img4,
-              text:"Lorem ipsum dolor sit"
-            },
-    
-        ]
+          {
+            image:"https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/1_14.png",
+            text:"Aerial Survey & Mapping"
+          },
+          {
+            image:"https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/1_14.png",
+            text:"Lorem ipsum dolor sit"
+          },
+          {
+            image:"https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/1_14.png",
+            text:"Lorem ipsum dolor sit"
+          },
+          {
+            image:"https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/1_14.png",
+            text:"Lorem ipsum dolor sit"
+          },
+  
+      ]
       return (
         <div className='p-4 text-primaryColor'>
                <div className='w-full flex flex-col m-0 text-center items-center justify-center'>
@@ -36,9 +30,9 @@ const Partners = () => {
                     <>
                <div key ={index} className="py-3 px-3 md:py-6 md:px-6 text-[1.2rem]">
               <div className="imageContainer w-full transition-transform duration-200 transform ">
-                <img className="w-[140px] h-[140px] filter grayscale transition-all duration-200 hover:grayscale-0" 
-                  srcSet={`${item.image} 160w`}
-            sizes="(max-width: 600px) 120px, 160px"
+                <img className="w-[120px] h-[120px] filter grayscale transition-all duration-200 hover:grayscale-0" 
+                  srcSet={`${item.image} 140w`}
+            sizes="(max-width: 600px) 100px, 140px"
                   src={item.image} alt="" />
               </div>
             </div>

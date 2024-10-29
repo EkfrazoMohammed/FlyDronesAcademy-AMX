@@ -14,7 +14,7 @@ const Banner = () => {
     <div className="h-[380px] md:h-[90vh] flex flex-col md:flex-row justify-between gap-2 sm:gap-4 md:gap-16 px-2 py-2 md:px-32 md:py-8 items-center">
 
       <div className=" text-black text-2xl font-bold flex justify-center items-center w-full md:w-[50%] m-2 md:m-auto">
-      <div className="image-container w-[220px] h-[220px] md:w-[360px] md:h-[360px] object-cover">
+      <div className="image-container w-[200px] h-[200px] md:w-[340px] md:h-[340px] object-cover">
         <img className='h-full w-full'   src="https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/flydro_logo_png_1.png" alt="" />
       </div>
       </div>
