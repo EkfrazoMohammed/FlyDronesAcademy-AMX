@@ -9,6 +9,7 @@ import Descriptions from '../HomeComponents/Descriptions';
 import Locations from '../HomeComponents/Locations';
 import FAQ from '../HomeComponents/FAQ';
 import Partners from '../HomeComponents/Partners';
+import Accordion from '../utils/Accordion';
 
 const Home = () => {
   return (
@@ -40,6 +41,7 @@ const Home = () => {
       <div id="locations">
         <Locations />
       </div>
+      <Accordion />
     </div>
   );
 };
