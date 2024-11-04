@@ -2,7 +2,7 @@ import React from 'react'
 import Divider from '../utils/Divider'
 import Stepper from '../utils/Stepper'
 
-const CourseOutlines = () => {
+const CourseOutlines = ({courseData}) => {
  
   return (
     <>
@@ -16,7 +16,7 @@ const CourseOutlines = () => {
           Course Duration : 5 Days
             </div>
           {/* intro end*/}
-          <Stepper />
+          <Stepper courseData={courseData} />
       </div>
     </>
   )

@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react';
 
-const Stepper = () => {
+const Stepper = ({courseData}) => {
+  console.log(courseData?.curriculum)
    // Days and topics array
    const days1={   
     "curriculum": [
@@ -179,7 +180,7 @@ const Stepper = () => {
  
   return (
     <>
-      {days1.curriculum.map((dayData, dayIndex) => (
+      {courseData?.curriculum?.map((dayData, dayIndex) => (
         <div key={dayIndex} className='mb-4  md:mb-10cmd:mt-0'>
           <div className='text-primaryColor h-[40px] md:h-[10vh] w-full bg-white p-2 md:p-4 md:m-auto'
           
