@@ -32,8 +32,8 @@ const CourseDetails = () => {
       <>
     <div>
     <Banner />
-    <Introduction />
-    <CourseOutlines />
+    <Introduction courseData={courseData}/>
+    <CourseOutlines courseData={courseData} />
 
 
     </div>

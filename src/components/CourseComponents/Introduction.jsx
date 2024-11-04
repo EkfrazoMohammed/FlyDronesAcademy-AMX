@@ -9,7 +9,8 @@ import doc3 from "../../assets/1 (30).png";
 import doc4 from "../../assets/1 (31).png"; 
 import doc5 from "../../assets/1 (32).png"; 
 
-const Introduction = () => {
+const Introduction = ({courseData}) => {
+  console.log(courseData)
   const data = [
     {
       image: img1,
@@ -60,7 +61,8 @@ const Introduction = () => {
           {/* intro start*/}
           <Divider text='Introduction' />
           <div className="paragraphs max-w-[1280px] py-2 px-2 md:py-6 md:px-12 text-[1.1rem] md:text-[1.2rem] text-justify m-auto">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo ducimus saepe cumque, rerum cupiditate quae vero repellat assumenda laboriosam dolores similique unde nam ipsa cum, sapiente consequatur praesentium et commodi, provident omnis quaerat. Nam, sed labore a quos veritatis asperiores blanditiis at commodi dignissimos eligendi temporibus eum distinctio facilis nostrum enim magni impedit vero praesentium quia pariatur expedita necessitatibus. Porro exercitationem adipisci repellat illum tempora eius reiciendis reprehenderit, officia at sunt est sequi provident cum id recusandae iusto similique error.
+            {courseData?.description}
+            {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo ducimus saepe cumque, rerum cupiditate quae vero repellat assumenda laboriosam dolores similique unde nam ipsa cum, sapiente consequatur praesentium et commodi, provident omnis quaerat. Nam, sed labore a quos veritatis asperiores blanditiis at commodi dignissimos eligendi temporibus eum distinctio facilis nostrum enim magni impedit vero praesentium quia pariatur expedita necessitatibus. Porro exercitationem adipisci repellat illum tempora eius reiciendis reprehenderit, officia at sunt est sequi provident cum id recusandae iusto similique error. */}
           </div>
           {/* intro end*/}
 

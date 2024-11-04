@@ -29,6 +29,7 @@ const CourseBanner = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    
     // Clear the error message for the current field on change
     setErrorMessages((prev) => ({ ...prev, [name]: '' }));
   };
@@ -42,96 +43,112 @@ const CourseBanner = () => {
   const [otpTimerEmail, setOtpTimerEmail] = useState(60);
   const [mobileVerified, setMobileVerified] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
-
   const isValidGstin = (gstin) => {
     const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
     return gstinRegex.test(gstin);
   };
 
- 
   const handleSendMobileOtp = async () => {
-    if (!formData.mobile_number) {
-      setErrorMessages((prev) => ({ ...prev, mobile_number: 'Mobile number is required.' }));
-      return;
-    }
-
     try {
-      await API.post('send_otp/', { mobile: formData.mobile_number });
+      const response = await API.post('send_otp/', {
+        mobile: formData.mobile_number,
+      });
+      console.log(response.data.message); // "OTP sent successfully"
       setIsMobileOtpSent(true);
-      setOtpTimerMobile(60); // Reset the timer to 60 seconds
-      console.log("OTP sent to mobile successfully");
+      setOtpTimerMobile(30); // Reset the timer
     } catch (error) {
-      setErrorMessages((prev) => ({ ...prev, mobile_number: error.response.data.error }));
       console.error('Error sending OTP to mobile:', error);
     }
   };
 
-  const handleSendEmailOtp = async () => {
-    if (!formData.email) {
-      setErrorMessages((prev) => ({ ...prev, email: 'Email is required.' }));
-      return;
-    }
 
-    try {
-      await API.post('send_otp/', { email: formData.email });
-      setIsEmailOtpSent(true);
-      setOtpTimerEmail(60); // Reset the timer to 60 seconds
-      console.log("OTP sent to email successfully");
-    } catch (error) {
-      setErrorMessages((prev) => ({ ...prev, email: error.response.data.error }));
-      console.error('Error sending OTP to email:', error);
-    }
-  };
 
-  const verifyOtp = async (type) => {
-    try {
-      const otp = type === 'email' ? otpEmail : otpMobile;
-      const response = await API.post('verify_otp/', {
-        [type]: type === 'email' ? formData.email : formData.mobile_number,
-        otp,
-      });
-
-      if (response.data.message === 'OTP verified successfully') {
-        type === 'email' ? setEmailVerified(true) : setMobileVerified(true);
-        setErrorMessages((prev) => ({ ...prev, [type]: '' }));
-        console.log(`${type.charAt(0).toUpperCase() + type.slice(1)} verified`);
-      } else {
-        setErrorMessages((prev) => ({ ...prev, [type]: 'Invalid OTP. Please try again.' }));
-      }
-    } catch (error) {
-      // setErrorMessages((prev) => ({ ...prev, [type]: error.response.data.error }));
-      setErrorMessages((prev) => ({ ...prev, [type]: 'Invalid OTP. Please try again.' }));
-      console.error('OTP verification error:', error);
+  const handleOtpChange = (e, type) => {
+    const { value } = e.target;
+    if (type == 'mobile') {
+      setOtpMobile(value);
+    } else {
+      setOtpEmail(value);
     }
   };
 
   // Timer effect for mobile OTP
   useEffect(() => {
     let timer;
-    if (isMobileOtpSent && otpTimerMobile > 0) {
+    if (otpTimerMobile > 0) {
       timer = setInterval(() => {
         setOtpTimerMobile((prev) => prev - 1);
       }, 1000);
-    } else if (otpTimerMobile === 0) {
-      setIsMobileOtpSent(false);
-      setErrorMessages((prev) => ({ ...prev, mobile_number: '' }));
     }
     return () => clearInterval(timer);
-  }, [isMobileOtpSent, otpTimerMobile]);
+  }, [otpTimerMobile]);
 
-  // Timer effect for email OTP
-  useEffect(() => {
-    let timer;
-    if (isEmailOtpSent && otpTimerEmail > 0) {
-      timer = setInterval(() => {
-        setOtpTimerEmail((prev) => prev - 1);
-      }, 1000);
-    } else if (otpTimerEmail === 0) {
-      setIsEmailOtpSent(false);
-      setErrorMessages((prev) => ({ ...prev, email: '' }));
+ // Timer effect for OTP countdown
+ useEffect(() => {
+  let timer;
+  if (isEmailOtpSent && otpTimerEmail > 0) {
+    timer = setInterval(() => {
+      setOtpTimerEmail((prev) => prev - 1);
+    }, 1000); // Decrease timer every second
+  } else if (otpTimerEmail === 0) {
+    setIsEmailOtpSent(false); // Hide OTP input and reset state
+  }
+  return () => clearInterval(timer);
+}, [isEmailOtpSent, otpTimerEmail]);
+// Handle OTP sending
+const handleSendEmailOtp = async () => {
+  console.log("Sending OTP to email:", formData.email);
+  setIsEmailOtpSent(true);
+  // Your API call to send OTP here, e.g.:
+  try {
+    await API.post('send_otp/', {
+      email: formData.email,
+    });
+    console.log("OTP sent successfully");
+    setOtpTimerEmail(30); // Reset the timer for 30 seconds
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+  }
+};
+const verifyOtp = async (type) => {
+  try {
+    if (type === 'email') {
+      const response = await API.post('verify_otp/', {
+        email: formData.email,
+        otp: otpEmail,
+      });
+
+      // Check if the response indicates success
+      if (response.data.message === 'OTP verified successfully') {
+        setEmailVerified(true); // Update state to indicate email is verified
+        console.log('Email verified');
+      } else {
+        // Set error message for invalid OTP
+        console.error('Invalid email OTP');
+      }
     }
-    return () => clearInterval(timer);
-  }, [isEmailOtpSent, otpTimerEmail]);
+    else if (type === "mobile") {
+      const response = await API.post('verify_otp/', {
+        mobile: formData.mobile_number,
+        otp: otpMobile,
+      });
+
+      // Check if the response indicates success
+      if (response.data.message === 'OTP verified successfully') {
+        setMobileVerified(true); // Update state to indicate email is verified
+        console.log('Mobile verified');
+
+      } else {
+        
+        // Set error message for invalid OTP
+        console.error('Invalid email OTP');
+      }
+    }
+  } catch (error) {
+    // Handle any errors that occur during the request
+    console.error('OTP verification error:', error);
+  }
+};
 
   const [selectedCourse, setSelectedCourse] = useState(null);  // Track the selected course for the modal
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
@@ -379,7 +396,7 @@ const handleSelectEvent = async (event) => {
           
               <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 my-2">Name</label>
+        <label className="block text-sm font-medium text-gray-700">Name</label>
         <input
           type="text"
           name="name"
@@ -391,105 +408,116 @@ const handleSelectEvent = async (event) => {
       {errorMessages.name && <div className="text-red-600 text-sm">{errorMessages.name}</div>}
       </div>
         
-      <div>
-      {/* Mobile OTP Section */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 my-2">Mobile Number</label>
-        <div className="mt-2 flex items-center justify-between">
-          <input
-            type="text"
-            name="mobile_number"
-            value={formData.mobile_number}
-            onChange={handleChange}
-            className="border rounded py-1 px-2 w-[75%]"
-            required
-            disabled={mobileVerified} // Disable input if verified
-          />
-          <button
-            onClick={handleSendMobileOtp}
-            type="button"
-            disabled={isMobileOtpSent || !formData.mobile_number || mobileVerified}
-            className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
-          >
-            {isMobileOtpSent ? 'SMS OTP sent' : 'Send SMS OTP'}
-          </button>
-        </div>
-        {isMobileOtpSent && (
-          <div className="mt-2 flex items-center justify-between">
-            <input
-              type="number"
-              value={otpMobile}
-              onChange={(e) => setOtpMobile(e.target.value)}
-              placeholder="Enter SMS OTP"
-              className="mt-1 py-1 px-2 w-[75%] border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              disabled={mobileVerified} // Disable input if verified
-            />
-            <button
-              onClick={() => verifyOtp('mobile_number')}
-              className={`mt-2 ml-2 px-4 py-2 rounded text-green-500`}
-              disabled={mobileVerified}
-            >
-             {mobileVerified ? 'Verified' : 'Verify'}
-            </button>
-          </div>
-        )}
-        {isMobileOtpSent && !mobileVerified && otpTimerMobile > 0 && (
-          <div className="text-sm text-gray-500">OTP valid for: {otpTimerMobile} seconds</div>
-        )}
-        {mobileVerified && <div className="text-sm mt-2 text-green-600">Mobile number successfully verified!</div>}
-        {errorMessages.mobile_number && <div className="text-red-600 text-sm">{errorMessages.mobile_number}</div>}
-      </div>
+     {/* Mobile OTP Section */}
+<div>
+  <label className="block text-sm font-medium text-gray-700">Mobile Number</label>
+  <div className="mt-2 flex items-center justify-between">
+    <input
+      type="number"
+      name="mobile_number"
+      value={formData.mobile_number}
+      onChange={handleChange}
+      className="border rounded py-1 px-2 w-[75%]"
+      required
+    />
+    <button
+      onClick={handleSendMobileOtp}
+      type="button"
+      disabled={isMobileOtpSent || !formData.mobile_number}
+      className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
+    >
+      {isMobileOtpSent ? 'Resend SMS OTP' : 'Send SMS OTP'}
+    </button>
+  </div>
+  {isMobileOtpSent && (
+    <div className="mt-2 flex items-center">
+      <input
+        type="text"
+        value={otpMobile}
+        onChange={(e) => handleOtpChange(e, 'mobile')}
+        placeholder="Enter OTP"
+        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+      />
+      <button
+        onClick={() => verifyOtp('mobile')}
+        className={`mt-2 ml-2 px-4 py-2 rounded ${
+          mobileVerified ? 'bg-green-500 text-white' : 'text-green-500'
+        }`}
+        disabled={mobileVerified}
+      >
+        {mobileVerified ? 'Verified' : 'Verify'}
+      </button>
+    </div>
+  )}
+  {isMobileOtpSent && otpTimerMobile > 0 && (
+    <div className="text-sm text-gray-500">OTP valid for: {otpTimerMobile} seconds</div>
+  )}
+  {mobileVerified && <div className="text-sm mt-2 text-green-600">Mobile number successfully verified!</div>}
+  
+{errorMessages.mobile_number && <div className="text-red-600 text-sm">{errorMessages.mobile_number}</div>}
+</div>
+     
+<div>
+  <label className="block text-sm font-medium text-gray-700">Email</label>
+  <div className="mt-2 flex items-center justify-between">
+    <input
+      type="email"
+      name="email"
+      value={formData.email}
+      onChange={handleChange}
+      className="border rounded py-1 px-2 w-[75%]"
+      required
+      disabled={emailVerified} // Disable input if verified
+    />
+    <button
+      onClick={handleSendEmailOtp}
+      type="button"
+      disabled={isEmailOtpSent || !formData.email || emailVerified}
+      className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
+    >
+      {isEmailOtpSent  ? 'Resend Email OTP' : 'Send Email OTP'}
+    </button>
+  </div>
+  {isEmailOtpSent && (
+    <div className="mt-2 flex items-center">
+      <input
+        type="text"
+        value={otpEmail}
+        onChange={(e) => handleOtpChange(e, 'email')}
+        placeholder="Enter Email OTP"
+        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        disabled={emailVerified} // Disable input if verified
+      />
+      {emailVerified ? <>
+        <button
+         className={`mt-2 ml-2 px-4 py-2 rounded bg-green-500 text-white`}
+        disabled={emailVerified} // Disable if already verified
+      >
+        {emailVerified ? 'Verified' : 'Verify'}
+      </button>
+      </>:<>
+      <button
+        onClick={() => verifyOtp('email')}
+        className={`mt-2 ml-2 px-4 py-2 rounded text-green-500`}
+      >
+        {emailVerified ? 'Verified' : 'Verify'}
+      </button>
+      </>}
+    
+    </div>
+  )}
+  {isEmailOtpSent && !emailVerified && otpTimerEmail > 0 && (
+    <div className="text-sm text-gray-500">OTP valid for: {otpTimerEmail} seconds</div>
+  )}
+  
+  {emailVerified && <div className="text-sm mt-2 text-green-600">Email successfully verified!</div>}
+  {errorMessages.email && <div className="text-red-600 text-sm">{errorMessages.email}</div>}
+    
+</div>
 
-      {/* Email OTP Section */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 my-2 my-2">Email</label>
-        <div className="mt-2 flex items-center justify-between">
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="border rounded py-1 px-2 w-[75%]"
-            required
-            disabled={emailVerified} // Disable input if verified
-          />
-          <button
-            onClick={handleSendEmailOtp}
-            type="button"
-            disabled={isEmailOtpSent || !formData.email || emailVerified}
-            className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
-          >
-            {isEmailOtpSent ? 'Email OTP sent' : 'Send Email OTP'}
-          </button>
-        </div>
-        {isEmailOtpSent && (
-          <div className="mt-2 flex items-center justify-between">
-            <input
-              type="number"
-              value={otpEmail}
-              onChange={(e) => setOtpEmail(e.target.value)}
-              placeholder="Enter Email OTP"
-              className="mt-1 py-1 px-2 w-[75%] border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              disabled={emailVerified} // Disable input if verified
-            />
-            <button
-              onClick={() => verifyOtp('email')}
-              className={`mt-2 ml-2 px-4 py-2 rounded text-green-500`}
-              disabled={emailVerified}
-            >
-              {emailVerified ? 'Verified' : 'Verify'}
-            </button>
-          </div>
-        )}
-        {isEmailOtpSent && !emailVerified && otpTimerEmail > 0 && (
-          <div className="text-sm text-gray-500">OTP valid for: {otpTimerEmail} seconds</div>
-        )}
-        {emailVerified && <div className="text-sm mt-2 text-green-600">Email successfully verified!</div>}
-        {errorMessages.email && <div className="text-red-600 text-sm">{errorMessages.email}</div>}
-      </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 my-2">Address</label>
+        <label className="block text-sm font-medium text-gray-700">Address</label>
         <input
           type="text"
           name="address"
@@ -503,7 +531,7 @@ const handleSelectEvent = async (event) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 my-2">Organization Name (optional)</label>
+        <label className="block text-sm font-medium text-gray-700">Organization Name (optional)</label>
         <input
           type="text"
           name="organization_name"
@@ -514,13 +542,13 @@ const handleSelectEvent = async (event) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 my-2">GSTIN number (optional)</label>
+        <label className="block text-sm font-medium text-gray-700">GSTIN number (optional)</label>
         <input
           type="text"
           name="gstin"
           value={formData.gstin}
           onChange={handleChange}
-          className="border rounded py-1 px-2 w-full mb-3"
+          className="border rounded py-1 px-2 w-full"
         />
          {errorMessages.gstin && <div className="text-red-600 text-sm">{errorMessages.gstin}</div>}
      
@@ -534,7 +562,6 @@ const handleSelectEvent = async (event) => {
       >
         Next
       </button>
-    </div>
     </div>
           </Modal>
 
