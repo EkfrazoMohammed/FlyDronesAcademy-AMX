@@ -1,48 +1,33 @@
-import React from 'react'
-import { Collapse } from 'antd';
+
+import Accordion from '../utils/Accordion';
 const FAQ = () => {
-  
-  const items = [
+  const faqs = [
     {
-      key: '1',
-      label: 'What does FlyDro do ?',
-      children:<span className='bg-transparent text-[1.1rem] justify-inter-word'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugit cupiditate eos ut quos numquam tempore consequatur obcaecati exercitationem deleniti architecto aspernatur doloribus voluptate eum praesentium officiis asperiores facere aut modi, nam ea perferendis. Voluptatum voluptates laudantium amet officiis animi ex! Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat quaerat quia, laudantium rem cum non, voluptatum earum hic facilis officia consequuntur eveniet. Ex, veritatis ratione optio quas laudantium cumque dolore. Quos recusandae saepe molestiae inventore impedit autem eveniet deleniti quis.</span>,
+      question: "What are the advantages of your service?",
+      answer: "If you go over your organisations or user limit, a member of the team will reach out about bespoke pricing. In the meantime, our collaborative features won't appear in accounts or users that are over the 100-account or 1,000-user limit.",
     },
     {
-      key: '2',
-      label: 'What does FlyDro do ?',
-      children:<span className='bg-transparent text-[1.1rem]'> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit dolorum doloribus magnam debitis, dignissimos eligendi itaque consequatur, quam a excepturi assumenda dolores, minima fugit nostrum facilis nisi. Nostrum aperiam, incidunt facere quae placeat quia, tempore ut quod quisquam quas nam. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat quaerat quia, laudantium rem cum non, voluptatum earum hic facilis officia consequuntur eveniet. Ex, veritatis ratione optio quas laudantium cumque dolore. Quos recusandae saepe molestiae inventore impedit autem eveniet deleniti quis.</span>,
- 
-   
+      question: "Are there any fees or commissions in addition to the monthly subscription?",
+      answer: "If you go over your organisations or user limit, a member of the team will reach out about bespoke pricing. In the meantime, our collaborative features won't appear in accounts or users that are over the 100-account or 1,000-user limit.",
     },
     {
-      key: '3',
-      label: 'What does FlyDro do ?',
-      children:<span className='bg-transparent text-[1.1rem]'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore perferendis laborum facilis et veritatis deleniti non! Eligendi, voluptatem possimus. Architecto optio repudiandae aliquam dolores necessitatibus, asperiores veniam molestias laboriosam fugiat inventore sed ipsam et voluptate, impedit assumenda, rem ex esse. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat quaerat quia, laudantium rem cum non, voluptatum earum hic facilis officia consequuntur eveniet. Ex, veritatis ratione optio quas laudantium cumque dolore. Quos recusandae saepe molestiae inventore impedit autem eveniet deleniti quis.</span>,
- 
+      question: "You really don't charge per user? Why not?",
+      answer: "If you go over your organisations or user limit, a member of the team will reach out about bespoke pricing. In the meantime, our collaborative features won't appear in accounts or users that are over the 100-account or 1,000-user limit.",
     },
     {
-        key: '4',
-        label: 'What does FlyDro do ?',
-        children:<span className='bg-transparent text-[1.1rem]'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugit cupiditate eos ut quos numquam tempore consequatur obcaecati exercitationem deleniti architecto aspernatur doloribus voluptate eum praesentium officiis asperiores facere aut modi, nam ea perferendis. Voluptatum voluptates laudantium amet officiis animi ex! Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat quaerat quia, laudantium rem cum non, voluptatum earum hic facilis officia consequuntur eveniet. Ex, veritatis ratione optio quas laudantium cumque dolore. Quos recusandae saepe molestiae inventore impedit autem eveniet deleniti quis.</span>,
-      },
-      {
-        key: '5',
-        label: 'What does FlyDro do ?',
-        children:<span className='bg-transparent text-[1.1rem] justify-inter-word'> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit dolorum doloribus magnam debitis, dignissimos eligendi itaque consequatur, quam a excepturi assumenda dolores, minima fugit nostrum facilis nisi. Nostrum aperiam, incidunt facere quae placeat quia, tempore ut quod quisquam quas nam. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat quaerat quia, laudantium rem cum non, voluptatum earum hic facilis officia consequuntur eveniet. Ex, veritatis ratione optio quas laudantium cumque dolore. Quos recusandae saepe molestiae inventore impedit autem eveniet deleniti quis.</span>,
+      question: "What happens when I go over my monthly active limit?",
+      answer: "If you go over your organisations or user limit, a member of the team will reach out about bespoke pricing. In the meantime, our collaborative features won't appear in accounts or users that are over the 100-account or 1,000-user limit.",
+    },
+    {
+      question: "Can your service help me understand how to work with my product?",
+      answer: "If you go over your organisations or user limit, a member of the team will reach out about bespoke pricing. In the meantime, our collaborative features won't appear in accounts or users that are over the 100-account or 1,000-user limit.",
+    },
+    {
+      question: "Which third-party application do you integrate with?",
+      answer: "If you go over your organisations or user limit, a member of the team will reach out about bespoke pricing. In the meantime, our collaborative features won't appear in accounts or users that are over the 100-account or 1,000-user limit.",
+    },
    
-     
-      },
-      {
-        key: '6',
-        label: 'What does FlyDro do ?',
-        children:<span className='bg-transparent text-[1.1rem] justify-inter-word' >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugit cupiditate eos ut quos numquam tempore consequatur obcaecati exercitationem deleniti architecto aspernatur doloribus voluptate eum praesentium officiis asperiores facere aut modi, nam ea perferendis. Voluptatum voluptates laudantium amet officiis animi ex! Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat quaerat quia, laudantium rem cum non, voluptatum earum hic facilis officia consequuntur eveniet. Ex, veritatis ratione optio quas laudantium cumque dolore. Quos recusandae saepe molestiae inventore impedit autem eveniet deleniti quis.</span>,
-   
-      },
   ];
-    const onChange = (key) => {
-        console.log(key);
-      };
   return (
     <div className=' text-primaryColor md:min-h-[50vh]'>
  <div className='w-full flex flex-col m-0 text-center items-center justify-center'>
@@ -59,12 +44,11 @@ const FAQ = () => {
           <div className="paragraphs py-4 px-4 md:py-6 md:px-10 text-[1.5rem] text-left w-full flex items-center justify-center " >
 
           <div className='max-w-[1280px] w-full'>
-          <Collapse items={items} defaultActiveKey={['1']} onChange={onChange} />
+            <Accordion faqs={faqs} />
           </div>
           </div>
         </div>
         </div>
-
     </div>
   )
 }
