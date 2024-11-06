@@ -32,7 +32,7 @@ const IndustryApplications = () => {
 
       <img
         loading="lazy" // Enables lazy loading
-        className="w-[100px] h-[100px] md:w-[140px] md:h-[140px]"
+        className="w-[100px] h-[100px] md:w-[180px] md:h-[140px]"
         src={item.image}
         srcSet={`${item.image} 160w`}
         sizes="(max-width: 600px) 100px, 140px"

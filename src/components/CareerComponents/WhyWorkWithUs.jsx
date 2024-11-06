@@ -22,7 +22,7 @@ const WhyWorkWithUs = () => {
         <div className=" text-primaryColor">
 
      
-       <div className="heading p-4 text-[2rem] flex justify-center items-center text-center m-0 bg-white w-full">Why Work With Us ?
+       <div className="heading p-4 text-[2rem] flex justify-center items-center text-center m-0 w-full">Why Work With Us ?
        </div>
 
     <div className="relative h-[400px] md:h-[60vh] color-primaryColor">

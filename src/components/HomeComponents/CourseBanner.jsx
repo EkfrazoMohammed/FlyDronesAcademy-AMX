@@ -147,8 +147,8 @@ const CourseBanner = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await API.get('course/');
-        setCourses(response.data);  // Set the fetched courses in state
+        const response = await API.get('course/?course_status=true');
+        setCourses(response?.data?.data);  // Set the fetched courses in state
         // setCourses(myGetData)
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -334,7 +334,7 @@ const handleSelectEvent = async (event) => {
     <div className="relative min-h-[720px] md:min-h-[80vh] color-primaryColor">
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0"
         style={{ backgroundImage: "url('https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/vector_01.JPG')" }}
       ></div>
 
@@ -354,7 +354,7 @@ const handleSelectEvent = async (event) => {
                 <div className="text-justify text-[1rem] md:text-[1.4rem] font-medium course_description"   dangerouslySetInnerHTML={{ __html: item.description }}></div>
                 {/* <div className="text-[1rem] md:text-[1.4rem] font-medium course_description" dangerouslySetInnerHTML={{ __html: item.description }} ></div> */}
               </div>
-              <div className="text-[1.2rem] md:text-[2rem] font-bold">Course Duration : {item.course_duration}</div>
+              <div className="text-[1.2rem] md:text-[2rem] font-bold">Course Duration : {item.course_duration} Days</div>
             </div>
 
             <div className="text-black text-2xl font-bold flex flex-col gap-6 justify-center items-center w-full md:w-[50%] m-auto">
