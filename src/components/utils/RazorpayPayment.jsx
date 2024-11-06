@@ -106,7 +106,7 @@ const RazorpayPayment = ({ setShowSuccessmodal, orderData }) => {
   return (
     <div>
       {/* Button to trigger Razorpay */}
-      <button onClick={handlePayment} target="_blank" rel="noopener noreferrer">
+      <button onClick={handlePayment} target="_blank" rel="noopener noreferrer" className="border border-primaryColor text-primaryColor bg-transparent hover:bg-primaryColor hover:text-transparent transition-all rounded-full py-0 px-3">
         Pay now
       </button>
     </div>
