@@ -10,7 +10,7 @@ const CourseBanner = () => {
   
   const [formData, setFormData] = useState({
     name: '',
-    mobile_number: '',
+    mobile: '',
     email: '',
     address: '',
     organization_name: '',
@@ -19,7 +19,7 @@ const CourseBanner = () => {
 
   const [errorMessages, setErrorMessages] = useState({
     name: '',
-    mobile_number: '',
+    mobile: '',
     email: '',
     address: '',
     gstin:''
@@ -50,18 +50,18 @@ const CourseBanner = () => {
 
  
   const handleSendMobileOtp = async () => {
-    if (!formData.mobile_number) {
-      setErrorMessages((prev) => ({ ...prev, mobile_number: 'Mobile number is required.' }));
+    if (!formData.mobile) {
+      setErrorMessages((prev) => ({ ...prev, mobile: 'Mobile number is required.' }));
       return;
     }
 
     try {
-      await API.post('send_otp/', { mobile: formData.mobile_number });
+      await API.post('send_otp/', { mobile: formData.mobile });
       setIsMobileOtpSent(true);
       setOtpTimerMobile(60); // Reset the timer to 60 seconds
       console.log("OTP sent to mobile successfully");
     } catch (error) {
-      setErrorMessages((prev) => ({ ...prev, mobile_number: error.response.data.error }));
+      setErrorMessages((prev) => ({ ...prev, mobile: error.response.data.error }));
       console.error('Error sending OTP to mobile:', error);
     }
   };
@@ -87,7 +87,7 @@ const CourseBanner = () => {
     try {
       const otp = type === 'email' ? otpEmail : otpMobile;
       const response = await API.post('verify_otp/', {
-        [type]: type === 'email' ? formData.email : formData.mobile_number,
+        [type]: type === 'email' ? formData.email : formData.mobile,
         otp,
       });
 
@@ -114,7 +114,7 @@ const CourseBanner = () => {
       }, 1000);
     } else if (otpTimerMobile === 0) {
       setIsMobileOtpSent(false);
-      setErrorMessages((prev) => ({ ...prev, mobile_number: '' }));
+      setErrorMessages((prev) => ({ ...prev, mobile: '' }));
     }
     return () => clearInterval(timer);
   }, [isMobileOtpSent, otpTimerMobile]);
@@ -195,7 +195,7 @@ const allDatesData = courses.map(course => ({
     // Reset all state variables
     setFormData({
         name: '',
-        mobile_number: '',
+        mobile: '',
         email: '',
         address: '',
         organization_name: '',
@@ -233,7 +233,7 @@ const handleSubmit = async (e) => {
   // Reset error messages
   setErrorMessages({
     name: '',
-    mobile_number: '',
+    mobile: '',
     email: '',
     address: '',
     gstin:''
@@ -249,8 +249,8 @@ const handleSubmit = async (e) => {
     hasError = true;
   }
 
-  if (!formData.mobile_number) {
-    setErrorMessages((prev) => ({ ...prev, mobile_number: 'Mobile number is required.' }));
+  if (!formData.mobile) {
+    setErrorMessages((prev) => ({ ...prev, mobile: 'Mobile number is required.' }));
     hasError = true;
   }
 
@@ -287,7 +287,7 @@ const handleSubmit = async (e) => {
   const apiData = {
     name: formData.name,
     address: formData.organization_name, // Assuming organization name is used as address
-    phone_number: formData.mobile_number,
+    phone_number: formData.mobile,
     email: formData.email,
     organization: formData.organization_name || '',
     // gstin: formData.gstin,
@@ -398,8 +398,8 @@ const handleSelectEvent = async (event) => {
         <div className="mt-2 flex items-center justify-between">
           <input
             type="text"
-            name="mobile_number"
-            value={formData.mobile_number}
+            name="mobile"
+            value={formData.mobile}
             onChange={handleChange}
             className="border rounded py-1 px-2 w-[75%]"
             required
@@ -408,7 +408,7 @@ const handleSelectEvent = async (event) => {
           <button
             onClick={handleSendMobileOtp}
             type="button"
-            disabled={isMobileOtpSent || !formData.mobile_number || mobileVerified}
+            disabled={isMobileOtpSent || !formData.mobile || mobileVerified}
             className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
           >
             {isMobileOtpSent ? 'SMS OTP sent' : 'Send SMS OTP'}
@@ -425,7 +425,7 @@ const handleSelectEvent = async (event) => {
               disabled={mobileVerified} // Disable input if verified
             />
             <button
-              onClick={() => verifyOtp('mobile_number')}
+              onClick={() => verifyOtp('mobile')}
               className={`mt-2 ml-2 px-4 py-2 rounded text-green-500`}
               disabled={mobileVerified}
             >
@@ -437,7 +437,7 @@ const handleSelectEvent = async (event) => {
           <div className="text-sm text-gray-500">OTP valid for: {otpTimerMobile} seconds</div>
         )}
         {mobileVerified && <div className="text-sm mt-2 text-green-600">Mobile number successfully verified!</div>}
-        {errorMessages.mobile_number && <div className="text-red-600 text-sm">{errorMessages.mobile_number}</div>}
+        {errorMessages.mobile && <div className="text-red-600 text-sm">{errorMessages.mobile}</div>}
       </div>
 
       {/* Email OTP Section */}

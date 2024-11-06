@@ -83,7 +83,7 @@ const RazorpayPayment = ({ setShowSuccessmodal, orderData }) => {
    
     try {
       const response = await API.post("order/", {
-        customer: orderData?.customerId, // Replace with actual customer ID
+        customer: Number(orderData?.customerId), // Replace with actual customer ID
         course: orderData?.courseId, // Replace with actual course ID
         slot: orderData?.slotId, // Replace with actual slot ID
       });
