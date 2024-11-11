@@ -512,7 +512,7 @@ const CourseBanner = () => {
 
                 {/* Email OTP Section */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 my-2 my-2">
+                  <label className="block text-sm font-medium text-gray-700 my-2">
                     Email
                   </label>
                   <div className="mt-2 flex items-center justify-between">
