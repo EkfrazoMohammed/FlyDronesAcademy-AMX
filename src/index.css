@@ -25,13 +25,17 @@
   --dark-blue: #175fab !important;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-collapse>.ant-collapse-item>.ant-collapse-header .ant-collapse-header-text {
+:where(.css-dev-only-do-not-override-1hpnbz2).ant-collapse
+  > .ant-collapse-item
+  > .ant-collapse-header
+  .ant-collapse-header-text {
   margin-inline-end: auto !important;
   font-size: 1.4rem !important;
   color: var(--primary) !important;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-collapse .ant-collapse-content {
+:where(.css-dev-only-do-not-override-1hpnbz2).ant-collapse
+  .ant-collapse-content {
   color: rgba(0, 0, 0, 0.88) !important;
   background-color: transparent !important;
   color: var(--primary) !important;
@@ -111,11 +115,11 @@ html {
 }
 :where(.css-1hpnbz2).ant-collapse .ant-collapse-content {
   color: #185fab !important;
-  background-color:none !important;
+  background-color: none !important;
   border-top: 1px solid #d9d9d9 !important;
 }
 
-:where(.css-1hpnbz2).ant-collapse>.ant-collapse-item >.ant-collapse-header {
+:where(.css-1hpnbz2).ant-collapse > .ant-collapse-item > .ant-collapse-header {
   position: relative !important;
   display: flex !important;
   flex-wrap: nowrap !important;
@@ -125,11 +129,16 @@ html {
   line-height: 1.6 !important;
   font-size: 1.2rem !important;
   cursor: pointer !important;
-  transition: all 0.3s,visibility 0s !important;
+  transition:
+    all 0.3s,
+    visibility 0s !important;
 }
-:where(.css-1hpnbz2).ant-collapse>.ant-collapse-item >.ant-collapse-header .ant-collapse-expand-icon {
+:where(.css-1hpnbz2).ant-collapse
+  > .ant-collapse-item
+  > .ant-collapse-header
+  .ant-collapse-expand-icon {
   height: 30px !important;
   display: flex !important;
   align-items: center !important;
-  padding-inline-end: 12px !important; 
+  padding-inline-end: 12px !important;
 }

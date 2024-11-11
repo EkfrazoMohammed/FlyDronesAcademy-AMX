@@ -1,13 +1,16 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import js from '@eslint/js';
+import globals from 'globals';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import prettier from 'eslint-plugin-prettier';
 
 export default [
-  { ignores: ['dist'] },
   {
-    files: ['**/*.{js,jsx}'],
+    ignores: ['dist'], // Ignore dist folder
+  },
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'], // Added TypeScript files in case you're using TS
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -22,6 +25,7 @@ export default [
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      prettier, // Integrate Prettier plugin
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -33,6 +37,7 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'prettier/prettier': 'error', // Ensure Prettier errors are shown as ESLint issues
     },
   },
-]
+];

@@ -1,6 +1,8 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 
-const IndustryApplications = lazy(() => import('../HomeComponents/IndustryApplications'));
+const IndustryApplications = lazy(
+  () => import('../HomeComponents/IndustryApplications'),
+);
 import Banner from '../HomeComponents/Banner';
 import MidSection from '../HomeComponents/MidSection';
 import CourseBanner from '../HomeComponents/CourseBanner';
@@ -27,10 +29,9 @@ const Home = () => {
         <Descriptions />
       </div>
       <div id="industry-applications">
-      <Suspense fallback={<div>Loading Applications...</div>}>
-        <IndustryApplications />
-      </Suspense>
-        {/* <IndustryApplications /> */}
+        <Suspense fallback={<div>Loading Applications...</div>}>
+          <IndustryApplications />
+        </Suspense>
       </div>
       <div id="faq">
         <FAQ />
