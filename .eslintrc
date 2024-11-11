@@ -1,0 +1,37 @@
+{
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "prettier",  // This will disable ESLint rules that conflict with Prettier
+      "plugin:prettier/recommended"  // Integrates Prettier with ESLint
+    ],
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "plugins": [
+      "react",
+      "react-hooks",
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": ["error", {
+        "semi": true,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "printWidth": 80,
+        "tabWidth": 2
+      }]
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  }
+  
