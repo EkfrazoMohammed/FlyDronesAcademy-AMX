@@ -142,3 +142,12 @@ html {
   align-items: center !important;
   padding-inline-end: 12px !important;
 }
+.rbc-calendar {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 4px !important;
+  height: 400px !important;
+}
