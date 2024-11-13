@@ -105,14 +105,14 @@ const CourseBanner = () => {
       } else {
         setErrorMessages((prev) => ({
           ...prev,
-          [type]: 'Invalid OTP. Please try again.',
+          [type]: 'Please enter a valid OTP.',
         }));
       }
     } catch (error) {
       // setErrorMessages((prev) => ({ ...prev, [type]: error.response.data.error }));
       setErrorMessages((prev) => ({
         ...prev,
-        [type]: 'Invalid OTP. Please try again.',
+        [type]: 'Please enter a valid OTP.',
       }));
       console.error('OTP verification error:', error);
     }
@@ -209,6 +209,14 @@ const CourseBanner = () => {
       email: '',
       address: '',
       organization_name: '',
+      gstin: '',
+    });
+    // Reset error messages
+    setErrorMessages({
+      name: '',
+      mobile: '',
+      email: '',
+      address: '',
       gstin: '',
     });
     setOtpMobile('');
@@ -332,8 +340,6 @@ const CourseBanner = () => {
   };
 
   const handleSelectEvent = async (event) => {
-    console.log('Event selected:', event);
-
     // Assuming the event contains course and slot information
     const data = {
       customerId: customer_id || localStorage.getItem('newUserId'), // Replace with dynamic customer ID if needed
@@ -430,7 +436,7 @@ const CourseBanner = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 my-2">
-                  Name
+                  Name <span className="required-asterisk text-red-600 font-medium">*</span>
                 </label>
                 <input
                   type="text"
@@ -451,11 +457,11 @@ const CourseBanner = () => {
                 {/* Mobile OTP Section */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 my-2">
-                    Mobile Number
+                    Mobile Number <span className="required-asterisk text-red-600 font-medium">*</span>
                   </label>
                   <div className="mt-2 flex items-center justify-between">
                     <input
-                      type="text"
+                      type="number"
                       name="mobile"
                       value={formData.mobile}
                       onChange={handleChange}
@@ -513,7 +519,7 @@ const CourseBanner = () => {
                 {/* Email OTP Section */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 my-2">
-                    Email
+                    Email <span className="required-asterisk text-red-600 font-medium">*</span>
                   </label>
                   <div className="mt-2 flex items-center justify-between">
                     <input
@@ -574,7 +580,7 @@ const CourseBanner = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 my-2">
-                    Address
+                    Address <span className="required-asterisk text-red-600 font-medium">*</span>
                   </label>
                   <input
                     type="text"

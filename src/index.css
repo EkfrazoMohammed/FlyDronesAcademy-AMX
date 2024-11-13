@@ -25,23 +25,6 @@
   --dark-blue: #175fab !important;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-collapse
-  > .ant-collapse-item
-  > .ant-collapse-header
-  .ant-collapse-header-text {
-  margin-inline-end: auto !important;
-  font-size: 1.4rem !important;
-  color: var(--primary) !important;
-}
-
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-collapse
-  .ant-collapse-content {
-  color: rgba(0, 0, 0, 0.88) !important;
-  background-color: transparent !important;
-  color: var(--primary) !important;
-  border-top: 1px solid #d9d9d9 !important;
-}
-
 .justify-inter-word {
   text-align: justify !important;
   text-justify: inter-word !important;
@@ -97,13 +80,6 @@
   /* Keep it behind other elements */
 }
 
-.flipbook-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px;
-}
-
 .page {
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
@@ -113,41 +89,24 @@
 html {
   scroll-behavior: smooth;
 }
-:where(.css-1hpnbz2).ant-collapse .ant-collapse-content {
-  color: #185fab !important;
-  background-color: none !important;
-  border-top: 1px solid #d9d9d9 !important;
-}
 
-:where(.css-1hpnbz2).ant-collapse > .ant-collapse-item > .ant-collapse-header {
-  position: relative !important;
-  display: flex !important;
-  flex-wrap: nowrap !important;
-  align-items: flex-start !important;
-  padding: 12px 16px !important;
-  color: #185fab !important;
-  line-height: 1.6 !important;
-  font-size: 1.2rem !important;
-  cursor: pointer !important;
-  transition:
-    all 0.3s,
-    visibility 0s !important;
-}
-:where(.css-1hpnbz2).ant-collapse
-  > .ant-collapse-item
-  > .ant-collapse-header
-  .ant-collapse-expand-icon {
-  height: 30px !important;
-  display: flex !important;
-  align-items: center !important;
-  padding-inline-end: 12px !important;
-}
 .rbc-calendar {
   box-sizing: border-box;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   margin: 4px !important;
   height: 400px !important;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
