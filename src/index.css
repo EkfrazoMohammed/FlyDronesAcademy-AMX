@@ -107,10 +107,10 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
-.rbc-event.rbc-selected{
+.rbc-event.rbc-selected {
   background-color: #17f285 !important;
 }
 .rbc-event-continues-after {
