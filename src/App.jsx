@@ -25,9 +25,7 @@ const App = () => {
           </Router>
         </>
       ) : (
-        <>
-          <ComingSoon />
-        </>
+        <ComingSoon />
       )}
     </>
   );

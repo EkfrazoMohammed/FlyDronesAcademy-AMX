@@ -10,10 +10,12 @@ const CalendarComponent = ({ datesData, onSelectEvent }) => {
   const events = useMemo(() => {
     return datesData.map((slot) => {
       const startDate = moment(slot.startDate, 'MM/DD/YYYY').toDate(); // Convert string to Date
-      console.log(startDate)
-      const endDate = moment(slot.endDate, 'MM/DD/YYYY').add(1, 'days').toDate(); // Add one day to include the end date
+      console.log(startDate);
+      const endDate = moment(slot.endDate, 'MM/DD/YYYY')
+        .add(1, 'days')
+        .toDate(); // Add one day to include the end date
       // const endDate = moment(slot.endDate, 'MM/DD/YYYY').toDate(); // Convert string to Date
-      console.log(endDate)
+      console.log(endDate);
       return {
         slotId: slot.id,
         name: slot.name,

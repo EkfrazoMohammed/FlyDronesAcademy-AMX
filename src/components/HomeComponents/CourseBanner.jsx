@@ -324,11 +324,13 @@ const CourseBanner = () => {
 
     if (hasError) return; // Stop submission if there are validation errors
 
-     // Verify mobile and email before proceeding
+    // Verify mobile and email before proceeding
     if (!mobileVerified || !emailVerified) {
-      alert('Please verify your mobile number and email address before proceeding!');
+      alert(
+        'Please verify your mobile number and email address before proceeding!',
+      );
       return;
-     }
+    }
     // setIsFirstModalOpen(false);
     // handleOpenSecondModal();
 
@@ -464,7 +466,10 @@ const CourseBanner = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 my-2">
-                  Name <span className="required-asterisk text-red-600 font-medium">*</span>
+                  Name{' '}
+                  <span className="required-asterisk text-red-600 font-medium">
+                    *
+                  </span>
                 </label>
                 <input
                   type="text"
@@ -485,7 +490,10 @@ const CourseBanner = () => {
                 {/* Mobile OTP Section */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 my-2">
-                    Mobile Number <span className="required-asterisk text-red-600 font-medium">*</span>
+                    Mobile Number{' '}
+                    <span className="required-asterisk text-red-600 font-medium">
+                      *
+                    </span>
                   </label>
                   <div className="mt-2 flex items-center justify-between">
                     <input
@@ -550,7 +558,10 @@ const CourseBanner = () => {
                 {/* Email OTP Section */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 my-2">
-                    Email <span className="required-asterisk text-red-600 font-medium">*</span>
+                    Email{' '}
+                    <span className="required-asterisk text-red-600 font-medium">
+                      *
+                    </span>
                   </label>
                   <div className="mt-2 flex items-center justify-between">
                     <input
@@ -615,7 +626,10 @@ const CourseBanner = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 my-2">
-                    Address <span className="required-asterisk text-red-600 font-medium">*</span>
+                    Address{' '}
+                    <span className="required-asterisk text-red-600 font-medium">
+                      *
+                    </span>
                   </label>
                   <input
                     type="text"
@@ -684,7 +698,7 @@ const CourseBanner = () => {
             }}
           >
             <h2 className="text-2xl font-bold ">
-              Select a Date for {item.course_name}
+              Select a Slot for {item.course_name}
             </h2>
             <CalendarComponent
               datesData={filteredSlots}
