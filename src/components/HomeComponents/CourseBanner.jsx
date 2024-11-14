@@ -27,6 +27,14 @@ const CourseBanner = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'mobile') {
+      setHasMobileChanged(true); // Mark email as changed
+      setErrorMessages((prev) => ({ ...prev, mobile: '' }));
+    }
+    if (name === 'email') {
+      setHasEmailChanged(true); // Mark email as changed
+      setErrorMessages((prev) => ({ ...prev, email: '' }));
+    }
     // Clear the error message for the current field on change
     setErrorMessages((prev) => ({ ...prev, [name]: '' }));
   };
@@ -36,10 +44,12 @@ const CourseBanner = () => {
   const [otpEmail, setOtpEmail] = useState('');
   const [isMobileOtpSent, setIsMobileOtpSent] = useState(false);
   const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
-  const [otpTimerMobile, setOtpTimerMobile] = useState(60);
-  const [otpTimerEmail, setOtpTimerEmail] = useState(60);
+  const [otpTimerMobile, setOtpTimerMobile] = useState(120);
+  const [otpTimerEmail, setOtpTimerEmail] = useState(120);
   const [mobileVerified, setMobileVerified] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
+  const [hasMobileChanged, setHasMobileChanged] = useState(false);
+  const [hasEmailChanged, setHasEmailChanged] = useState(false);
 
   const isValidGstin = (gstin) => {
     const gstinRegex =
@@ -57,9 +67,10 @@ const CourseBanner = () => {
     }
 
     try {
+      setHasMobileChanged(false);
       await API.post('send_otp/', { mobile: formData.mobile });
       setIsMobileOtpSent(true);
-      setOtpTimerMobile(60); // Reset the timer to 60 seconds
+      setOtpTimerMobile(120); // Reset the timer to 60 seconds
       console.log('OTP sent to mobile successfully');
     } catch (error) {
       setErrorMessages((prev) => ({
@@ -77,9 +88,10 @@ const CourseBanner = () => {
     }
 
     try {
+      setHasEmailChanged(false); // Reset change flag to prevent repeated clicks
       await API.post('send_otp/', { email: formData.email });
       setIsEmailOtpSent(true);
-      setOtpTimerEmail(60); // Reset the timer to 60 seconds
+      setOtpTimerEmail(120); // Reset the timer to 60 seconds
       console.log('OTP sent to email successfully');
     } catch (error) {
       setErrorMessages((prev) => ({
@@ -105,14 +117,14 @@ const CourseBanner = () => {
       } else {
         setErrorMessages((prev) => ({
           ...prev,
-          [type]: 'Invalid OTP. Please try again.',
+          [type]: 'Please enter a valid OTP.',
         }));
       }
     } catch (error) {
       // setErrorMessages((prev) => ({ ...prev, [type]: error.response.data.error }));
       setErrorMessages((prev) => ({
         ...prev,
-        [type]: 'Invalid OTP. Please try again.',
+        [type]: 'Please enter a valid OTP.',
       }));
       console.error('OTP verification error:', error);
     }
@@ -195,9 +207,13 @@ const CourseBanner = () => {
     console.log('SelectedCourse', course);
     setSelectedCourse(course); // Set the selected course for modal data
     setIsFirstModalOpen(true);
+    setIsMobileOtpSent(false);
+    setIsEmailOtpSent(false);
+    setMobileVerified(false);
+    setEmailVerified(false);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (modelNumber) => {
     setIsFirstModalOpen(false);
     setIsSecondModalOpen(false);
     setShowSuccessmodal(false);
@@ -211,14 +227,28 @@ const CourseBanner = () => {
       organization_name: '',
       gstin: '',
     });
+    // Reset error messages
+    setErrorMessages({
+      name: '',
+      mobile: '',
+      email: '',
+      address: '',
+      organization_name: '',
+      gstin: '',
+    });
     setOtpMobile('');
     setOtpEmail('');
     setIsMobileOtpSent(false);
     setIsEmailOtpSent(false);
-    setOtpTimerMobile(60);
-    setOtpTimerEmail(60);
+    setOtpTimerMobile(120);
+    setOtpTimerEmail(120);
     setMobileVerified(false);
     setEmailVerified(false);
+    if (modelNumber == 'second') {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
   };
 
   const handleOpenSecondModal = () => {
@@ -294,6 +324,11 @@ const CourseBanner = () => {
 
     if (hasError) return; // Stop submission if there are validation errors
 
+     // Verify mobile and email before proceeding
+    if (!mobileVerified || !emailVerified) {
+      alert('Please verify your mobile number and email address before proceeding!');
+      return;
+     }
     // setIsFirstModalOpen(false);
     // handleOpenSecondModal();
 
@@ -304,7 +339,7 @@ const CourseBanner = () => {
       phone_number: formData.mobile,
       email: formData.email,
       organization: formData.organization_name || '',
-      // gstin: formData.gstin,
+      gstin: formData.gstin || '',
       // If optional, make it an empty string if not provided
     };
 
@@ -332,8 +367,6 @@ const CourseBanner = () => {
   };
 
   const handleSelectEvent = async (event) => {
-    console.log('Event selected:', event);
-
     // Assuming the event contains course and slot information
     const data = {
       customerId: customer_id || localStorage.getItem('newUserId'), // Replace with dynamic customer ID if needed
@@ -341,6 +374,7 @@ const CourseBanner = () => {
       slotId: event.slotId, // You might need to get the slot ID from the event or context
       amount: selectedCourse.amount,
     };
+    console.log(data);
     setOrderData(data);
   };
 
@@ -430,7 +464,7 @@ const CourseBanner = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 my-2">
-                  Name
+                  Name <span className="required-asterisk text-red-600 font-medium">*</span>
                 </label>
                 <input
                   type="text"
@@ -451,11 +485,11 @@ const CourseBanner = () => {
                 {/* Mobile OTP Section */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 my-2">
-                    Mobile Number
+                    Mobile Number <span className="required-asterisk text-red-600 font-medium">*</span>
                   </label>
                   <div className="mt-2 flex items-center justify-between">
                     <input
-                      type="text"
+                      type="number"
                       name="mobile"
                       value={formData.mobile}
                       onChange={handleChange}
@@ -467,7 +501,10 @@ const CourseBanner = () => {
                       onClick={handleSendMobileOtp}
                       type="button"
                       disabled={
-                        isMobileOtpSent || !formData.mobile || mobileVerified
+                        isMobileOtpSent ||
+                        !formData.mobile ||
+                        mobileVerified ||
+                        !hasMobileChanged
                       }
                       className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
                     >
@@ -513,7 +550,7 @@ const CourseBanner = () => {
                 {/* Email OTP Section */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 my-2">
-                    Email
+                    Email <span className="required-asterisk text-red-600 font-medium">*</span>
                   </label>
                   <div className="mt-2 flex items-center justify-between">
                     <input
@@ -523,13 +560,17 @@ const CourseBanner = () => {
                       onChange={handleChange}
                       className="border rounded py-1 px-2 w-[75%]"
                       required
-                      disabled={emailVerified} // Disable input if verified
+                      disabled={emailVerified}
+                      // disabled={emailVerified} // Disable input if verified
                     />
                     <button
                       onClick={handleSendEmailOtp}
                       type="button"
                       disabled={
-                        isEmailOtpSent || !formData.email || emailVerified
+                        isEmailOtpSent ||
+                        !formData.email ||
+                        emailVerified ||
+                        !hasEmailChanged
                       }
                       className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
                     >
@@ -574,7 +615,7 @@ const CourseBanner = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 my-2">
-                    Address
+                    Address <span className="required-asterisk text-red-600 font-medium">*</span>
                   </label>
                   <input
                     type="text"
@@ -638,7 +679,9 @@ const CourseBanner = () => {
 
           <Modal
             isOpen={isSecondModalOpen && selectedCourse?.id === item.id}
-            onClose={handleCloseModal}
+            onClose={() => {
+              handleCloseModal('second');
+            }}
           >
             <h2 className="text-2xl font-bold ">
               Select a Date for {item.course_name}
