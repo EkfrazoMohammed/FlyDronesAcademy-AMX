@@ -62,3 +62,25 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+.rbc-event, .rbc-day-slot .rbc-background-event {
+  border: none;
+  box-sizing: border-box;
+  box-shadow: none;
+  margin: 0;
+  padding: 2px 5px;
+  background-color: #3174ad;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.rbc-event.rbc-selected, .rbc-day-slot .rbc-selected.rbc-background-event {
+  background-color: #17f285 !important;
+}
+.rbc-event-continues-after {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-radius: 10px !important;
+}

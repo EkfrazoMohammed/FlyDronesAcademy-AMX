@@ -2,5 +2,5 @@ projectKey=FlyDro
 serverUrl=http://localhost:9000
 serverVersion=10.7.0.96327
 dashboardUrl=http://localhost:9000/dashboard?id=FlyDro
-ceTaskId=623d855d-2b2e-45d8-b56b-55476f92f744
-ceTaskUrl=http://localhost:9000/api/ce/task?id=623d855d-2b2e-45d8-b56b-55476f92f744
+ceTaskId=8bbb076a-60cf-4a10-ad2c-8d9f00939c12
+ceTaskUrl=http://localhost:9000/api/ce/task?id=8bbb076a-60cf-4a10-ad2c-8d9f00939c12
