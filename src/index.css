@@ -118,3 +118,13 @@ input[type='number'] {
   border-bottom-right-radius: 0;
   border-radius: 10px !important;
 }
+
+.rbc-month-row {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  flex: 1 0 0;
+  flex-basis: 0px;
+  overflow: visible !important;
+  height: 100%;
+}

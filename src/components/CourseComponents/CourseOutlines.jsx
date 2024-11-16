@@ -11,7 +11,7 @@ const CourseOutlines = ({ courseData }) => {
         <Divider text="Course Outlines" />
 
         <div className="text-[1.1rem] md:text-[2rem] text-primaryColor  font-medium max-w-[1280px] py-4 text-left px-4 md:px-12 uppercase m-auto">
-          Course Duration : 5 Days
+          Course Duration : {courseData?.course_duration} Days
         </div>
         {/* intro end*/}
         <Stepper courseData={courseData} />

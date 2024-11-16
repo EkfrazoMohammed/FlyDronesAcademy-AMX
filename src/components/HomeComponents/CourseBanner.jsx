@@ -13,7 +13,7 @@ const CourseBanner = () => {
     email: '',
     address: '',
     organization_name: '',
-    gstin: '',
+    gst_number: '',
   });
 
   const [errorMessages, setErrorMessages] = useState({
@@ -21,7 +21,7 @@ const CourseBanner = () => {
     mobile: '',
     email: '',
     address: '',
-    gstin: '',
+    gst_number: '',
   });
 
   const handleChange = (e) => {
@@ -51,10 +51,10 @@ const CourseBanner = () => {
   const [hasMobileChanged, setHasMobileChanged] = useState(false);
   const [hasEmailChanged, setHasEmailChanged] = useState(false);
 
-  const isValidGstin = (gstin) => {
-    const gstinRegex =
+  const isValidGstin = (gst_number) => {
+    const gst_numberRegex =
       /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
-    return gstinRegex.test(gstin);
+    return gst_numberRegex.test(gst_number);
   };
 
   const handleSendMobileOtp = async () => {
@@ -192,6 +192,7 @@ const CourseBanner = () => {
       maxSeats: slot.max_candidate,
       availableSeats: slot.seat_available,
       bookedSeats: slot.booked_seats,
+      is_active: slot.is_active,
     }));
   };
 
@@ -225,7 +226,7 @@ const CourseBanner = () => {
       email: '',
       address: '',
       organization_name: '',
-      gstin: '',
+      gst_number: '',
     });
     // Reset error messages
     setErrorMessages({
@@ -234,7 +235,7 @@ const CourseBanner = () => {
       email: '',
       address: '',
       organization_name: '',
-      gstin: '',
+      gst_number: '',
     });
     setOtpMobile('');
     setOtpEmail('');
@@ -277,7 +278,7 @@ const CourseBanner = () => {
       mobile: '',
       email: '',
       address: '',
-      gstin: '',
+      gst_number: '',
     });
 
     let hasError = false;
@@ -310,16 +311,19 @@ const CourseBanner = () => {
     }
 
     // Validate GSTIN if provided
-    if (formData.gstin && !isValidGstin(formData.gstin)) {
-      setErrorMessages((prev) => ({ ...prev, gstin: '*Invalid GSTIN number' }));
+    if (formData.gst_number && !isValidGstin(formData.gst_number)) {
+      setErrorMessages((prev) => ({
+        ...prev,
+        gst_number: '*Invalid GSTIN number',
+      }));
       hasError = true;
       localStorage.removeItem('GSTIN');
       return;
     }
 
     // Store GSTIN in localStorage if provided
-    if (formData.gstin && isValidGstin(formData.gstin)) {
-      localStorage.setItem('GSTIN', formData.gstin);
+    if (formData.gst_number && isValidGstin(formData.gst_number)) {
+      localStorage.setItem('GSTIN', formData.gst_number);
     }
 
     if (hasError) return; // Stop submission if there are validation errors
@@ -337,11 +341,11 @@ const CourseBanner = () => {
     // Prepare API payload
     const apiData = {
       name: formData.name,
-      address: formData.organization_name, // Assuming organization name is used as address
+      address: formData.address, // Assuming organization name is used as address
       phone_number: formData.mobile,
       email: formData.email,
       organization: formData.organization_name || '',
-      gstin: formData.gstin || '',
+      gst_number: formData.gst_number || '',
       // If optional, make it an empty string if not provided
     };
 
@@ -386,6 +390,7 @@ const CourseBanner = () => {
       <div
         className="absolute inset-0 bg-fill"
         style={{
+          backgroundSize: 'contain',
           backgroundImage:
             "url('https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/vector_01.JPG')",
         }}
@@ -423,21 +428,30 @@ const CourseBanner = () => {
             </div>
 
             <div className="text-black text-2xl font-bold flex flex-col gap-6 justify-center items-center w-full md:w-[50%] m-auto">
-              <div
-                className="image-container p-4 flex flex-col gap-2 items-center justify-center w-[190px] h-[190px] md:w-[220px] md:h-[220px] rounded-full mb-2 md:mb-6 text-white bg-fill object-cover"
-                style={{
-                  backgroundImage:
-                    "url('https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/vector_02.JPG')",
-                }}
-              >
-                <div className="flex text-[1.6rem] md:text-[1.8rem] opacity-90">
-                  Course Fees
-                </div>
-                <div className="flex text-[1.3rem] md:text-[1.6rem] opacity-90">
-                  ₹ {item.amount} /-
-                </div>
-                <div className="flex text-[1.3rem] md:text-[1.6rem] opacity-90">
-                  inc. of all taxes
+              <div className="relative">
+                {/* Background layer */}
+                <div
+                  className="absolute inset-0  opacity-[.95] pointer-events-none image-container p-4 flex flex-col gap-2 items-center justify-center w-[190px] h-[190px] md:w-[220px] md:h-[220px] rounded-full mb-2 md:mb-6 text-white  object-contain bg-contain"
+                  style={{
+                    backgroundSize: 'cover',
+                    backgroundImage:
+                      "url('https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/vector_02.JPG')",
+                  }}
+                ></div>
+
+                {/* Content layer */}
+                <div className="relative z-10 image-container p-4 flex flex-col gap-2 items-center justify-center w-[190px] h-[190px] md:w-[220px] md:h-[220px] rounded-full mb-2 md:mb-6 text-white bg-fill object-cover">
+                  <div className="flex text-[1.6rem] md:text-[1.8rem] opacity-90">
+                    Course Fees
+                  </div>
+                  <div className="flex text-[1.3rem] md:text-[1.6rem] opacity-90">
+                    ₹ {item.amount} /-
+                  </div>
+                  <div className="flex text-[1.3rem] md:text-[1.6rem] opacity-90">
+                    {item?.is_tax_included
+                      ? 'inc. of all taxes'
+                      : 'exc. of all taxes'}
+                  </div>
                 </div>
               </div>
 
@@ -665,18 +679,17 @@ const CourseBanner = () => {
                   </label>
                   <input
                     type="text"
-                    name="gstin"
-                    value={formData.gstin}
+                    name="gst_number"
+                    value={formData.gst_number}
                     onChange={handleChange}
                     className="border rounded py-1 px-2 w-full mb-3"
                   />
-                  {errorMessages.gstin && (
+                  {errorMessages.gst_number && (
                     <div className="text-red-600 text-sm">
-                      {errorMessages.gstin}
+                      {errorMessages.gst_number}
                     </div>
                   )}
                 </div>
-
                 <button
                   type="submit"
                   className="w-full py-2 px-4 border rounded-full bg-white text-primaryColor font-bold hover:bg-primaryColor hover:text-white cursor-pointer transition"
