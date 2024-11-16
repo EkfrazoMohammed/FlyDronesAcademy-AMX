@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'; // Import PropTypes
 const localizer = momentLocalizer(moment);
 
 const CalendarComponent = ({ datesData, onSelectEvent }) => {
-  const events = useMemo(() => {
+  const allevents = useMemo(() => {
     return datesData.map((slot) => {
       const startDate = moment(slot.startDate, 'MM/DD/YYYY').toDate(); // Convert string to Date
       console.log(startDate);
@@ -23,9 +23,17 @@ const CalendarComponent = ({ datesData, onSelectEvent }) => {
         start: startDate,
         end: endDate,
         allDay: true,
+        is_active: slot.is_active,
       };
     });
   }, [datesData]);
+
+  // Today's date
+  const today = new Date();
+  // Filter events where `start` is greater than today and `is_active` is true
+  const events = allevents.filter(
+    (event) => event.start > today && event.is_active,
+  );
 
   return (
     <Calendar
