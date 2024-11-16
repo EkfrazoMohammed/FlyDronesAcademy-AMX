@@ -22,7 +22,9 @@ const Accordion = ({ faqs }) => {
                 aria-expanded={expandedIndex === index}
                 aria-controls={`faqs-text-0${index + 1}`}
               >
-                <span className="text-[1.5rem]">{faq.question}</span>
+                <span className="text-[1.2rem] md:text-[1.5rem]">
+                  {faq?.question}
+                </span>
                 <svg
                   className="fill-primaryColor shrink-0 ml-8"
                   width="16"
