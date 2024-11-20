@@ -711,7 +711,8 @@ const CourseBanner = () => {
             }}
           >
             <h2 className="text-2xl font-bold ">
-              Select a Slot for {item.course_name}
+              Select the slot for the course
+              {/* Select a Slot for {item.course_name} */}
             </h2>
             <CalendarComponent
               datesData={filteredSlots}

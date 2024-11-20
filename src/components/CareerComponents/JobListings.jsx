@@ -45,12 +45,30 @@ const JobListings = () => {
     });
   };
 
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === 'mobile_number') {
+      // Validate mobile number: must not start with 0 and must be up to 10 digits
+      if (/^[1-9][0-9]{0,9}$/.test(value) || value === '') {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      }
+    } else {
+      // For other fields, just update the value
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleFileChange = (e) => {
@@ -63,6 +81,35 @@ const JobListings = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation Logic
+    if (!formData.name.trim()) {
+      alert('Name is required.');
+      return;
+    }
+    if (!/^[1-9][0-9]{9}$/.test(formData.mobile_number)) {
+      alert('Mobile number must be 10 digits and cannot start with 0.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      alert('Please provide a valid email address.');
+      return;
+    }
+    if (!formData.job_experience.trim()) {
+      alert('Job experience is required.');
+      return;
+    }
+    if (!formData.resume) {
+      alert('Please upload your resume.');
+      return;
+    }
+    if (!selectedDepartment) {
+      alert('Please select a department.');
+      return;
+    }
+    if (!selectedRole) {
+      alert('Please select a role.');
+      return;
+    }
     const formDataToSend = new FormData();
     formDataToSend.append('name', formData.name);
     formDataToSend.append('mobile_number', formData.mobile_number);
@@ -77,8 +124,14 @@ const JobListings = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       console.log('Job application submitted:', response.data);
-      handleCloseModal();
+      if (response.status === 201) {
+        alert(response.data.message || 'Form Subitted succesfully!');
+        handleCloseModal();
+      } else {
+        alert('error occurred');
+      }
     } catch (error) {
+      alert(error.response.data.error);
       console.error('Error submitting job application', error);
     }
   };
@@ -180,12 +233,13 @@ const JobListings = () => {
                   Mobile Number
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   id="mobile_number"
                   name="mobile_number"
                   value={formData.mobile_number}
                   onChange={handleChange}
                   required
+                  maxLength="10"
                   className="border rounded w-full py-1 px-2"
                 />
               </div>
@@ -208,9 +262,10 @@ const JobListings = () => {
                   Job Experience
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   id="job_experience"
                   name="job_experience"
+                  min="0"
                   value={formData.job_experience}
                   onChange={handleChange}
                   required

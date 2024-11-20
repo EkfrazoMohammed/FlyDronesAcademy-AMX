@@ -11,7 +11,6 @@ import doc4 from '../../assets/1 (31).png';
 import doc5 from '../../assets/1 (32).png';
 
 const Introduction = ({ courseData }) => {
-  console.log(courseData);
   const data = [
     {
       image: img1,
