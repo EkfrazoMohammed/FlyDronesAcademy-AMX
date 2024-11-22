@@ -39,6 +39,11 @@ const CourseBanner = () => {
     setErrorMessages((prev) => ({ ...prev, [name]: '' }));
   };
   const customer_id = localStorage.getItem('newUserId');
+  const isValidGstin = (gst_number) => {
+    const gst_numberRegex =
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
+    return gst_numberRegex.test(gst_number);
+  };
 
   const [otpMobile, setOtpMobile] = useState('');
   const [otpEmail, setOtpEmail] = useState('');
@@ -50,12 +55,6 @@ const CourseBanner = () => {
   const [emailVerified, setEmailVerified] = useState(false);
   const [hasMobileChanged, setHasMobileChanged] = useState(false);
   const [hasEmailChanged, setHasEmailChanged] = useState(false);
-
-  const isValidGstin = (gst_number) => {
-    const gst_numberRegex =
-      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
-    return gst_numberRegex.test(gst_number);
-  };
 
   const handleSendMobileOtp = async () => {
     if (!formData.mobile) {
@@ -101,7 +100,32 @@ const CourseBanner = () => {
       console.error('Error sending OTP to email:', error);
     }
   };
+  useEffect(() => {
+    let timer;
+    if (isEmailOtpSent && otpTimerEmail > 0) {
+      timer = setInterval(() => {
+        setOtpTimerEmail((prev) => prev - 1);
+      }, 1000);
+    } else if (otpTimerEmail === 0) {
+      setIsEmailOtpSent(false); // Allow resend OTP
+      setErrorMessages((prev) => ({ ...prev, email: '' }));
+    }
+    return () => clearInterval(timer);
+  }, [isEmailOtpSent, otpTimerEmail]);
 
+  // Timer effect for mobile OTP
+  useEffect(() => {
+    let timer;
+    if (isMobileOtpSent && otpTimerMobile > 0) {
+      timer = setInterval(() => {
+        setOtpTimerMobile((prev) => prev - 1);
+      }, 1000);
+    } else if (otpTimerMobile === 0) {
+      setIsMobileOtpSent(false); // Allow resend OTP
+      setErrorMessages((prev) => ({ ...prev, mobile: '' }));
+    }
+    return () => clearInterval(timer);
+  }, [isMobileOtpSent, otpTimerMobile]);
   const verifyOtp = async (type) => {
     try {
       const otp = type === 'email' ? otpEmail : otpMobile;
@@ -129,34 +153,6 @@ const CourseBanner = () => {
       console.error('OTP verification error:', error);
     }
   };
-
-  // Timer effect for mobile OTP
-  useEffect(() => {
-    let timer;
-    if (isMobileOtpSent && otpTimerMobile > 0) {
-      timer = setInterval(() => {
-        setOtpTimerMobile((prev) => prev - 1);
-      }, 1000);
-    } else if (otpTimerMobile === 0) {
-      setIsMobileOtpSent(false);
-      setErrorMessages((prev) => ({ ...prev, mobile: '' }));
-    }
-    return () => clearInterval(timer);
-  }, [isMobileOtpSent, otpTimerMobile]);
-
-  // Timer effect for email OTP
-  useEffect(() => {
-    let timer;
-    if (isEmailOtpSent && otpTimerEmail > 0) {
-      timer = setInterval(() => {
-        setOtpTimerEmail((prev) => prev - 1);
-      }, 1000);
-    } else if (otpTimerEmail === 0) {
-      setIsEmailOtpSent(false);
-      setErrorMessages((prev) => ({ ...prev, email: '' }));
-    }
-    return () => clearInterval(timer);
-  }, [isEmailOtpSent, otpTimerEmail]);
 
   const [selectedCourse, setSelectedCourse] = useState(null); // Track the selected course for the modal
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
@@ -385,7 +381,7 @@ const CourseBanner = () => {
   };
 
   return (
-    <div className="relative min-h-[720px] md:min-h-[80vh] color-primaryColor">
+    <div className="relative min-h-[710px] md:min-h-[80vh] color-primaryColor">
       {/* Background Image */}
       <div
         className="absolute inset-0"
@@ -431,7 +427,7 @@ const CourseBanner = () => {
               <div className="relative">
                 {/* Background layer */}
                 <div
-                  className="absolute inset-0  opacity-[.95] pointer-events-none image-container p-4 flex flex-col gap-2 items-center justify-center w-[190px] h-[190px] md:w-[220px] md:h-[220px] rounded-full mb-2 md:mb-6 text-white  object-contain bg-contain"
+                  className="absolute inset-0  opacity-[.95] pointer-events-none image-container p-4 flex flex-col gap-2 items-center justify-center w-[190px] h-[190px] md:w-[210px] md:h-[210px] rounded-full mb-2 md:mb-6 text-white  object-contain bg-contain"
                   style={{
                     backgroundSize: 'cover',
                     backgroundImage:
@@ -440,7 +436,7 @@ const CourseBanner = () => {
                 ></div>
 
                 {/* Content layer */}
-                <div className="relative z-10 image-container p-4 flex flex-col gap-2 items-center justify-center w-[190px] h-[190px] md:w-[220px] md:h-[220px] rounded-full mb-2 md:mb-6 text-white bg-fill object-cover">
+                <div className="relative z-10 image-container p-4 flex flex-col gap-2 items-center justify-center w-[190px] h-[190px] md:w-[210px] md:h-[210px] rounded-full mb-2 md:mb-6 text-white bg-fill object-cover">
                   <div className="flex text-[1.6rem] md:text-[1.8rem] opacity-90">
                     Course Fees
                   </div>
@@ -526,11 +522,15 @@ const CourseBanner = () => {
                         isMobileOtpSent ||
                         !formData.mobile ||
                         mobileVerified ||
-                        !hasMobileChanged
+                        (!hasMobileChanged && otpTimerMobile > 0) // Disable if the timer hasn't expired or input hasn't changed
                       }
                       className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
                     >
-                      {isMobileOtpSent ? 'SMS OTP sent' : 'Send SMS OTP'}
+                      {isMobileOtpSent
+                        ? 'SMS OTP sent'
+                        : otpTimerMobile > 0
+                          ? 'Send SMS OTP'
+                          : `Resend SMS OTP`}
                     </button>
                   </div>
                   {isMobileOtpSent && (
@@ -592,14 +592,18 @@ const CourseBanner = () => {
                       onClick={handleSendEmailOtp}
                       type="button"
                       disabled={
-                        isEmailOtpSent ||
-                        !formData.email ||
-                        emailVerified ||
-                        !hasEmailChanged
+                        isEmailOtpSent || // Disable while OTP is being sent
+                        !formData.email || // Disable if email is not entered
+                        emailVerified || // Disable if email is already verified
+                        (!hasEmailChanged && otpTimerEmail > 0) // Disable if the timer hasn't expired or input hasn't changed
                       }
                       className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
                     >
-                      {isEmailOtpSent ? 'Email OTP sent' : 'Send Email OTP'}
+                      {isEmailOtpSent
+                        ? 'Email OTP sent'
+                        : otpTimerEmail > 0
+                          ? 'Send Email OTP'
+                          : `Resend Email OTP`}
                     </button>
                   </div>
                   {isEmailOtpSent && (

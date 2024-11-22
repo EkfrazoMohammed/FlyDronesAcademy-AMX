@@ -10,19 +10,15 @@ const CalendarComponent = ({ datesData, onSelectEvent }) => {
   const allevents = useMemo(() => {
     return datesData.map((slot) => {
       const startDate = moment(slot.startDate, 'MM/DD/YYYY').toDate(); // Convert string to Date
-      console.log(startDate);
-      const endDate = moment(slot.endDate, 'MM/DD/YYYY')
-        .add(1, 'days')
-        .toDate(); // Add one day to include the end date
-      // const endDate = moment(slot.endDate, 'MM/DD/YYYY').toDate(); // Convert string to Date
-      console.log(endDate);
+      const endDate = moment(slot.endDate, 'MM/DD/YYYY').toDate(); // Convert string to Date
+
       return {
         slotId: slot.id,
         name: slot.name,
         title: `Batch: ${slot.name} - ${slot.availableSeats} seats available`,
         start: startDate,
         end: endDate,
-        allDay: true,
+        allDay: true, // Ensuring it's an all-day event
         is_active: slot.is_active,
       };
     });
@@ -30,6 +26,7 @@ const CalendarComponent = ({ datesData, onSelectEvent }) => {
 
   // Today's date
   const today = new Date();
+
   // Filter events where `start` is greater than today and `is_active` is true
   const events = allevents.filter(
     (event) => event.start > today && event.is_active,
