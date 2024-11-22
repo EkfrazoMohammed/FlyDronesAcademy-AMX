@@ -77,39 +77,51 @@ const JobListings = () => {
       resume: e.target.files[0],
     }));
   };
-
+  // Add a state for managing the submit button
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Disable the button by updating the state
+    setIsSubmitting(true);
 
     // Validation Logic
     if (!formData.name.trim()) {
       alert('Name is required.');
+      setIsSubmitting(false); // Re-enable the button
       return;
     }
     if (!/^[1-9][0-9]{9}$/.test(formData.mobile_number)) {
       alert('Mobile number must be 10 digits and cannot start with 0.');
+      setIsSubmitting(false);
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       alert('Please provide a valid email address.');
+      setIsSubmitting(false);
       return;
     }
     if (!formData.job_experience.trim()) {
       alert('Job experience is required.');
+      setIsSubmitting(false);
       return;
     }
     if (!formData.resume) {
       alert('Please upload your resume.');
+      setIsSubmitting(false);
       return;
     }
     if (!selectedDepartment) {
       alert('Please select a department.');
+      setIsSubmitting(false);
       return;
     }
     if (!selectedRole) {
       alert('Please select a role.');
+      setIsSubmitting(false);
       return;
     }
+
     const formDataToSend = new FormData();
     formDataToSend.append('name', formData.name);
     formDataToSend.append('mobile_number', formData.mobile_number);
@@ -125,16 +137,36 @@ const JobListings = () => {
       });
       console.log('Job application submitted:', response.data);
       if (response.status === 201) {
-        alert(response.data.message || 'Form Subitted succesfully!');
+        alert(response.data.message || 'Form submitted successfully!');
         handleCloseModal();
       } else {
-        alert('error occurred');
+        alert('An error occurred.');
       }
     } catch (error) {
-      alert(error.response.data.error);
-      console.error('Error submitting job application', error);
+      alert(error.response.data.error || 'Error submitting job application');
+      console.error('Error:', error);
+    } finally {
+      setIsSubmitting(false); // Re-enable the button
     }
   };
+
+  // Inside the form JSX
+  <form onSubmit={handleSubmit}>
+    {/* Other fields */}
+    <div className="flex justify-between">
+      <button
+        type="submit"
+        className={`text-primaryColor border rounded-full hover:text-white py-2 px-4 ${
+          isSubmitting
+            ? 'bg-gray-400 cursor-not-allowed'
+            : 'hover:bg-primaryColor'
+        }`}
+        disabled={isSubmitting} // Disable button if submitting
+      >
+        {isSubmitting ? 'Submitting...' : 'Submit'}
+      </button>
+    </div>
+  </form>;
 
   return (
     <>
@@ -289,9 +321,14 @@ const JobListings = () => {
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="text-primaryColor border rounded-full hover:text-white py-2 px-4 hover:bg-primaryColor"
+                  className={`text-primaryColor border rounded-full hover:text-white py-2 px-4 ${
+                    isSubmitting
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'hover:bg-primaryColor'
+                  }`}
+                  disabled={isSubmitting} // Disable button if submitting
                 >
-                  Submit
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
                 </button>
               </div>
             </form>
