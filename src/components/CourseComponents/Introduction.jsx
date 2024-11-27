@@ -2,7 +2,6 @@ import Divider from '../utils/Divider';
 import PropTypes from 'prop-types';
 
 const Introduction = ({ courseData, courseCriteria, courseDocument }) => {
- 
   return (
     <>
       {/* About us */}
