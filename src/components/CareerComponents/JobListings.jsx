@@ -43,15 +43,9 @@ const JobListings = () => {
       job_experience: '',
       resume: null,
     });
+    setIsSubmitting(false);
   };
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
-  // };
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'mobile_number') {

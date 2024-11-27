@@ -427,11 +427,11 @@ const CourseBanner = () => {
               <div className="relative">
                 {/* Background layer */}
                 <div
-                  className="absolute inset-0  opacity-[.95] pointer-events-none image-container p-4 flex flex-col gap-2 items-center justify-center w-[190px] h-[190px] md:w-[210px] md:h-[210px] rounded-full mb-2 md:mb-6 text-white  object-contain bg-contain"
+                  className="absolute inset-0  opacity-[.95] pointer-events-none image-container p-4 flex flex-col gap-2 items-center justify-center w-[190px] h-[190px] md:w-[210px] md:h-[210px] rounded-full mb-2 md:mb-6 text-white  object-contain bg-contain bg-[#0A57FF]"
                   style={{
                     backgroundSize: 'cover',
-                    backgroundImage:
-                      "url('https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/vector_02.JPG')",
+                    //   backgroundImage:
+                    //     "url('https://aactxg.stripocdn.email/content/guids/CABINET_f37167ea2322984dfeb6a0a05e92d2480b49356b15fb055bb2ce2e84131a12e4/images/vector_02.JPG')",
                   }}
                 ></div>
 
