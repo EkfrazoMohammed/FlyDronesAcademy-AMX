@@ -1,23 +1,39 @@
 import { useMemo } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import { format, parse, startOfWeek, getDay, addMinutes } from 'date-fns';
+import enUS from 'date-fns/locale/en-US';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import PropTypes from 'prop-types'; // Import PropTypes
+import PropTypes from 'prop-types';
 
-const localizer = momentLocalizer(moment);
+const locales = {
+  'en-US': enUS,
+};
+
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
 
 const CalendarComponent = ({ datesData, onSelectEvent }) => {
   const allevents = useMemo(() => {
     return datesData.map((slot) => {
-      const startDate = moment(slot.startDate, 'MM/DD/YYYY').toDate(); // Convert string to Date
-      const endDate = moment(slot.endDate, 'MM/DD/YYYY').toDate(); // Convert string to Date
+      // Parse the date and adjust to IST (+5:30)
+      const startDate = new Date(slot.startDate);
+      const endDate = new Date(slot.endDate);
+
+      // Adjust to Indian Standard Time (IST)
+      const startIST = addMinutes(startDate, 330); // 330 minutes = 5 hours 30 minutes
+      const endIST = addMinutes(endDate, 330);
 
       return {
         slotId: slot.id,
         name: slot.name,
         title: `Batch: ${slot.name} - ${slot.availableSeats} seats available`,
-        start: startDate,
-        end: endDate,
+        start: startIST,
+        end: endIST,
         allDay: true, // Ensuring it's an all-day event
         is_active: slot.is_active,
       };
