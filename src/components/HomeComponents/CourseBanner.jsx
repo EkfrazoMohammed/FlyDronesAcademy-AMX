@@ -202,6 +202,13 @@ const CourseBanner = () => {
   // Modal handlers
   const handleOpenModal = (course) => {
     console.log('SelectedCourse', course);
+    if (
+      course?.slots?.length === 0 ||
+      course.slots.every((slot) => !slot.is_active)
+    ) {
+      alert('No available slots for the selected course.');
+      return;
+    }
     setSelectedCourse(course); // Set the selected course for modal data
     setIsFirstModalOpen(true);
     setIsMobileOtpSent(false);
@@ -255,7 +262,7 @@ const CourseBanner = () => {
       );
       if (courseData && courseData.slots.length > 0) {
         console.log(courseData.slots);
-        setFilteredSlots(courseData.slots); // Prepare filtered slots for the calendar
+        setFilteredSlots(courseData?.slots); // Prepare filtered slots for the calendar
       } else {
         // Handle case where no slots are available
         alert('No available slots for the selected course.');
