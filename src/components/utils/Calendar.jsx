@@ -77,4 +77,4 @@ CalendarComponent.propTypes = {
   onSelectEvent: PropTypes.func.isRequired,
 };
 
-export default CalendarComponent
+export default CalendarComponent;
