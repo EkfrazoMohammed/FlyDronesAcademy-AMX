@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { useState, useEffect } from 'react';
 import { API } from '../../api/apirequest';
 import { Link } from 'react-router-dom';
@@ -272,10 +271,11 @@ const CourseBanner = () => {
     }
     setIsSecondModalOpen(true); // Open the second modal
   };
-  const [isGstVerified,setIsGstVerified]=useState(false);
+  const [isGstVerified, setIsGstVerified] = useState(false);
 
   const isValidGST = (gstNumber) => {
-    const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+    const gstRegex =
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
     return gstRegex.test(gstNumber);
   };
   const handleVerifyGST = async () => {
@@ -283,25 +283,25 @@ const CourseBanner = () => {
     console.log(formData.gst_number);
     try {
       const response = await fetch(
-        `https://amx-crm-dev.thestorywallcafe.com/api/company_details/${formData.gst_number}/`
+        `https://amx-crm-dev.thestorywallcafe.com/api/company_details/${formData.gst_number}/`,
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         setIsGstVerified(true);
         alert(`GST Verified: ${data.company_name}`);
       } else {
-        throw new Error("Invalid GSTIN");
+        throw new Error('Invalid GSTIN');
       }
     } catch (error) {
       setErrorMessages((prev) => ({
         ...prev,
-        gst_number: "Failed to verify GSTIN. Please check the number.",
+        gst_number: 'Failed to verify GSTIN. Please check the number.',
       }));
-      console.log(error)
+      console.log(error);
     }
   };
-    
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -714,38 +714,39 @@ const CourseBanner = () => {
                   />
                 </div>
                 <div>
-  <label className="block text-sm font-medium text-gray-700 my-2">
-    GSTIN number (optional)
-  </label>
-  <div className="mt-2 flex items-center justify-between mb-4">
-    <input
-      type="text"
-      name="gst_number"
-      value={formData.gst_number}
-      onChange={handleChange}
-      className="border rounded py-1 px-2 w-[75%]"
-      // className="border rounded py-1 px-2 w-full mb-3"
-    />
-    {isValidGST(formData.gst_number) && (
-      <button
-        onClick={handleVerifyGST}
-        type="button"
-        
-        className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
-      >
-        Verify GST
-      </button>
-    )}
-  </div>
-  {isGstVerified && (
-    <div className="text-green-600 text-sm mt-1">
-      GSTIN successfully verified!
-    </div>
-  )}
-  {errorMessages.gst_number && (
-    <div className="text-red-600 text-sm">{errorMessages.gst_number}</div>
-  )}
-</div>
+                  <label className="block text-sm font-medium text-gray-700 my-2">
+                    GSTIN number (optional)
+                  </label>
+                  <div className="mt-2 flex items-center justify-between mb-4">
+                    <input
+                      type="text"
+                      name="gst_number"
+                      value={formData.gst_number}
+                      onChange={handleChange}
+                      className="border rounded py-1 px-2 w-[75%]"
+                      // className="border rounded py-1 px-2 w-full mb-3"
+                    />
+                    {isValidGST(formData.gst_number) && (
+                      <button
+                        onClick={handleVerifyGST}
+                        type="button"
+                        className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
+                      >
+                        Verify GST
+                      </button>
+                    )}
+                  </div>
+                  {isGstVerified && (
+                    <div className="text-green-600 text-sm mt-1">
+                      GSTIN successfully verified!
+                    </div>
+                  )}
+                  {errorMessages.gst_number && (
+                    <div className="text-red-600 text-sm">
+                      {errorMessages.gst_number}
+                    </div>
+                  )}
+                </div>
 
                 {/* <div>
                   <label className="block text-sm font-medium text-gray-700 my-2">
