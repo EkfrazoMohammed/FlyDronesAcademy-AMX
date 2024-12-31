@@ -28,10 +28,12 @@ const CourseBanner = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (name === 'mobile') {
+      setIsMobileOtpSent(false); // Reset OTP sent flag when mobile changes
       setHasMobileChanged(true); // Mark email as changed
       setErrorMessages((prev) => ({ ...prev, mobile: '' }));
     }
     if (name === 'email') {
+      setIsEmailOtpSent(false); // Reset OTP sent flag when email changes
       setHasEmailChanged(true); // Mark email as changed
       setErrorMessages((prev) => ({ ...prev, email: '' }));
     }
@@ -108,6 +110,10 @@ const CourseBanner = () => {
       }, 1000);
     } else if (otpTimerEmail === 0) {
       setIsEmailOtpSent(false); // Allow resend OTP
+      setFormData((prev) => ({
+        ...prev,
+        email: '', // Reset only the email field
+      })); // Reset only the email field in formData
       setErrorMessages((prev) => ({ ...prev, email: '' }));
     }
     return () => clearInterval(timer);
@@ -122,6 +128,10 @@ const CourseBanner = () => {
       }, 1000);
     } else if (otpTimerMobile === 0) {
       setIsMobileOtpSent(false); // Allow resend OTP
+      setFormData((prev) => ({
+        ...prev,
+        mobile: '', // Reset only the email field
+      })); // Reset only the email field in formData
       setErrorMessages((prev) => ({ ...prev, mobile: '' }));
     }
     return () => clearInterval(timer);
