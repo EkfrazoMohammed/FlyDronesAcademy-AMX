@@ -51,8 +51,8 @@ const CourseBanner = () => {
   const [otpEmail, setOtpEmail] = useState('');
   const [isMobileOtpSent, setIsMobileOtpSent] = useState(false);
   const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
-  const [otpTimerMobile, setOtpTimerMobile] = useState(30);
-  const [otpTimerEmail, setOtpTimerEmail] = useState(30);
+  const [otpTimerMobile, setOtpTimerMobile] = useState(120);
+  const [otpTimerEmail, setOtpTimerEmail] = useState(120);
   const [mobileVerified, setMobileVerified] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const [hasMobileChanged, setHasMobileChanged] = useState(false);
@@ -71,7 +71,7 @@ const CourseBanner = () => {
       setHasMobileChanged(false);
       await API.post('send_otp/', { mobile: formData.mobile });
       setIsMobileOtpSent(true);
-      setOtpTimerMobile(30); // Reset the timer to 60 seconds
+      setOtpTimerMobile(120); // Reset the timer to 60 seconds
       console.log('OTP sent to mobile successfully');
     } catch (error) {
       setErrorMessages((prev) => ({
@@ -92,7 +92,7 @@ const CourseBanner = () => {
       setHasEmailChanged(false); // Reset change flag to prevent repeated clicks
       await API.post('send_otp/', { email: formData.email });
       setIsEmailOtpSent(true);
-      setOtpTimerEmail(30); // Reset the timer to 60 seconds
+      setOtpTimerEmail(120); // Reset the timer to 60 seconds
       console.log('OTP sent to email successfully');
     } catch (error) {
       setErrorMessages((prev) => ({
@@ -254,8 +254,8 @@ const CourseBanner = () => {
     setOtpEmail('');
     setIsMobileOtpSent(false);
     setIsEmailOtpSent(false);
-    setOtpTimerMobile(30);
-    setOtpTimerEmail(30);
+    setOtpTimerMobile(120);
+    setOtpTimerEmail(120);
     setMobileVerified(false);
     setEmailVerified(false);
     if (modelNumber == 'second') {
