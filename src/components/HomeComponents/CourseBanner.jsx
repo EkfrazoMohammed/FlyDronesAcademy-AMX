@@ -51,8 +51,8 @@ const CourseBanner = () => {
   const [otpEmail, setOtpEmail] = useState('');
   const [isMobileOtpSent, setIsMobileOtpSent] = useState(false);
   const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
-  const [otpTimerMobile, setOtpTimerMobile] = useState(120);
-  const [otpTimerEmail, setOtpTimerEmail] = useState(120);
+  const [otpTimerMobile, setOtpTimerMobile] = useState(30);
+  const [otpTimerEmail, setOtpTimerEmail] = useState(30);
   const [mobileVerified, setMobileVerified] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const [hasMobileChanged, setHasMobileChanged] = useState(false);
@@ -71,7 +71,7 @@ const CourseBanner = () => {
       setHasMobileChanged(false);
       await API.post('send_otp/', { mobile: formData.mobile });
       setIsMobileOtpSent(true);
-      setOtpTimerMobile(120); // Reset the timer to 60 seconds
+      setOtpTimerMobile(30); // Reset the timer to 60 seconds
       console.log('OTP sent to mobile successfully');
     } catch (error) {
       setErrorMessages((prev) => ({
@@ -92,7 +92,7 @@ const CourseBanner = () => {
       setHasEmailChanged(false); // Reset change flag to prevent repeated clicks
       await API.post('send_otp/', { email: formData.email });
       setIsEmailOtpSent(true);
-      setOtpTimerEmail(120); // Reset the timer to 60 seconds
+      setOtpTimerEmail(30); // Reset the timer to 60 seconds
       console.log('OTP sent to email successfully');
     } catch (error) {
       setErrorMessages((prev) => ({
@@ -110,10 +110,10 @@ const CourseBanner = () => {
       }, 1000);
     } else if (otpTimerEmail === 0) {
       setIsEmailOtpSent(false); // Allow resend OTP
-      setFormData((prev) => ({
-        ...prev,
-        email: '', // Reset only the email field
-      })); // Reset only the email field in formData
+      // setFormData((prev) => ({
+      //   ...prev,
+      //   email: '', // Reset only the email field
+      // })); // Reset only the email field in formData
       setErrorMessages((prev) => ({ ...prev, email: '' }));
     }
     return () => clearInterval(timer);
@@ -128,10 +128,10 @@ const CourseBanner = () => {
       }, 1000);
     } else if (otpTimerMobile === 0) {
       setIsMobileOtpSent(false); // Allow resend OTP
-      setFormData((prev) => ({
-        ...prev,
-        mobile: '', // Reset only the email field
-      })); // Reset only the email field in formData
+      // setFormData((prev) => ({
+      //   ...prev,
+      //   mobile: '', // Reset only the email field
+      // })); // Reset only the email field in formData
       setErrorMessages((prev) => ({ ...prev, mobile: '' }));
     }
     return () => clearInterval(timer);
@@ -254,8 +254,8 @@ const CourseBanner = () => {
     setOtpEmail('');
     setIsMobileOtpSent(false);
     setIsEmailOtpSent(false);
-    setOtpTimerMobile(120);
-    setOtpTimerEmail(120);
+    setOtpTimerMobile(30);
+    setOtpTimerEmail(30);
     setMobileVerified(false);
     setEmailVerified(false);
     if (modelNumber == 'second') {
@@ -372,10 +372,13 @@ const CourseBanner = () => {
     if (hasError) return; // Stop submission if there are validation errors
 
     // Verify mobile and email before proceeding
-    if (!mobileVerified || !emailVerified) {
-      alert(
-        'Please verify your mobile number and email address before proceeding!',
-      );
+    if (!mobileVerified) {
+      alert('Please verify your mobile number before proceeding!');
+      return;
+    }
+    // Verify mobile and email before proceeding
+    if (!emailVerified) {
+      alert('Please verify your email address before proceeding!');
       return;
     }
     // setIsFirstModalOpen(false);
@@ -391,7 +394,6 @@ const CourseBanner = () => {
       gst_number: formData.gst_number || '',
       // If optional, make it an empty string if not provided
     };
-
     try {
       const response = await API.post('course_register/', apiData, {
         headers: {
@@ -562,25 +564,29 @@ const CourseBanner = () => {
                       required
                       disabled={mobileVerified} // Disable input if verified
                     />
-                    <button
-                      onClick={handleSendMobileOtp}
-                      type="button"
-                      disabled={
-                        isMobileOtpSent ||
-                        !formData.mobile ||
-                        mobileVerified ||
-                        (!hasMobileChanged && otpTimerMobile > 0) // Disable if the timer hasn't expired or input hasn't changed
-                      }
-                      className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
-                    >
-                      {isMobileOtpSent
-                        ? 'SMS OTP sent'
-                        : otpTimerMobile > 0
-                          ? 'Send SMS OTP'
-                          : `Resend SMS OTP`}
-                    </button>
+
+                    {!mobileVerified && (
+                      <button
+                        onClick={handleSendMobileOtp}
+                        type="button"
+                        disabled={
+                          isMobileOtpSent ||
+                          !formData.mobile ||
+                          mobileVerified ||
+                          (!hasMobileChanged && otpTimerMobile > 0) // Disable if the timer hasn't expired or input hasn't changed
+                        }
+                        className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
+                      >
+                        {isMobileOtpSent
+                          ? 'SMS OTP sent'
+                          : otpTimerMobile > 0
+                            ? 'Send SMS OTP'
+                            : `Resend SMS OTP`}
+                      </button>
+                    )}
                   </div>
-                  {isMobileOtpSent && (
+
+                  {isMobileOtpSent && !mobileVerified && (
                     <div className="mt-2 flex items-center justify-between">
                       <input
                         type="number"
@@ -635,7 +641,26 @@ const CourseBanner = () => {
                       disabled={emailVerified}
                       // disabled={emailVerified} // Disable input if verified
                     />
-                    <button
+                    {!emailVerified && (
+                      <button
+                        onClick={handleSendEmailOtp}
+                        type="button"
+                        disabled={
+                          isEmailOtpSent || // Disable while OTP is being sent
+                          !formData.email || // Disable if email is not entered
+                          (!hasEmailChanged && otpTimerEmail > 0) // Disable if the timer hasn't expired or input hasn't changed
+                        }
+                        className="mt-1 ml-2 p-1 text-primaryColor rounded text-sm"
+                      >
+                        {isEmailOtpSent
+                          ? 'Email OTP sent'
+                          : otpTimerEmail > 0
+                            ? 'Send Email OTP'
+                            : `Resend Email OTP`}
+                      </button>
+                    )}
+
+                    {/* <button
                       onClick={handleSendEmailOtp}
                       type="button"
                       disabled={
@@ -651,27 +676,27 @@ const CourseBanner = () => {
                         : otpTimerEmail > 0
                           ? 'Send Email OTP'
                           : `Resend Email OTP`}
-                    </button>
+                    </button> */}
                   </div>
-                  {isEmailOtpSent && (
-                    <div className="mt-2 flex items-center justify-between">
-                      <input
-                        type="number"
-                        value={otpEmail}
-                        onChange={(e) => setOtpEmail(e.target.value)}
-                        placeholder="Enter Email OTP"
-                        className="mt-1 py-1 px-2 w-[75%] border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        disabled={emailVerified} // Disable input if verified
-                      />
-                      <button
-                        onClick={() => verifyOtp('email')}
-                        className={`mt-2 ml-2 px-4 py-2 rounded text-green-500`}
-                        disabled={emailVerified}
-                      >
-                        {emailVerified ? 'Verified' : 'Verify'}
-                      </button>
-                    </div>
-                  )}
+                  {isEmailOtpSent &&
+                    !emailVerified && ( // Show only if email is not verified
+                      <div className="mt-2 flex items-center justify-between">
+                        <input
+                          type="number"
+                          value={otpEmail}
+                          onChange={(e) => setOtpEmail(e.target.value)}
+                          placeholder="Enter Email OTP"
+                          className="mt-1 py-1 px-2 w-[75%] border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        />
+                        <button
+                          onClick={() => verifyOtp('email')}
+                          className={`mt-2 ml-2 px-4 py-2 rounded text-green-500`}
+                          disabled={emailVerified}
+                        >
+                          {emailVerified ? 'Verified' : 'Verify'}
+                        </button>
+                      </div>
+                    )}
                   {isEmailOtpSent && !emailVerified && otpTimerEmail > 0 && (
                     <div className="text-sm text-gray-500">
                       OTP valid for: {otpTimerEmail} seconds
