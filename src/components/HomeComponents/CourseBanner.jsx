@@ -48,14 +48,14 @@ const CourseBanner = () => {
   };
 
   const [otpMobile, setOtpMobile] = useState('');
-  const [otpEmail, setOtpEmail] = useState('');
   const [isMobileOtpSent, setIsMobileOtpSent] = useState(false);
-  const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
   const [otpTimerMobile, setOtpTimerMobile] = useState(120);
-  const [otpTimerEmail, setOtpTimerEmail] = useState(120);
   const [mobileVerified, setMobileVerified] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(false);
   const [hasMobileChanged, setHasMobileChanged] = useState(false);
+  const [otpEmail, setOtpEmail] = useState('');
+  const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
+  const [otpTimerEmail, setOtpTimerEmail] = useState(120);
+  const [emailVerified, setEmailVerified] = useState(false);
   const [hasEmailChanged, setHasEmailChanged] = useState(false);
 
   const handleSendMobileOtp = async () => {
@@ -69,11 +69,12 @@ const CourseBanner = () => {
 
     try {
       setHasMobileChanged(false);
-      await API.post('send_otp/', { mobile: formData.mobile });
       setIsMobileOtpSent(true);
       setOtpTimerMobile(120); // Reset the timer to 60 seconds
+      await API.post('send_otp/', { mobile: formData.mobile });
       console.log('OTP sent to mobile successfully');
     } catch (error) {
+      setIsMobileOtpSent(false);
       setErrorMessages((prev) => ({
         ...prev,
         mobile: error.response.data.error,
@@ -81,6 +82,21 @@ const CourseBanner = () => {
       console.error('Error sending OTP to mobile:', error);
     }
   };
+
+  // Timer effect for mobile OTP
+  useEffect(() => {
+    let timer;
+    if (isMobileOtpSent && otpTimerMobile > 0) {
+      timer = setInterval(() => {
+        setOtpTimerMobile((prev) => prev - 1);
+      }, 1000);
+    } else if (otpTimerMobile === 0) {
+      setOtpMobile('');
+      setIsMobileOtpSent(false); // Allow resend OTP
+      setErrorMessages((prev) => ({ ...prev, mobile: '' }));
+    }
+    return () => clearInterval(timer);
+  }, [isMobileOtpSent, otpTimerMobile]);
 
   const handleSendEmailOtp = async () => {
     if (!formData.email) {
@@ -90,11 +106,12 @@ const CourseBanner = () => {
 
     try {
       setHasEmailChanged(false); // Reset change flag to prevent repeated clicks
-      await API.post('send_otp/', { email: formData.email });
       setIsEmailOtpSent(true);
       setOtpTimerEmail(120); // Reset the timer to 60 seconds
+      await API.post('send_otp/', { email: formData.email });
       console.log('OTP sent to email successfully');
     } catch (error) {
+      setIsEmailOtpSent(false); // Allow resend if request fails
       setErrorMessages((prev) => ({
         ...prev,
         email: error.response.data.error,
@@ -109,33 +126,13 @@ const CourseBanner = () => {
         setOtpTimerEmail((prev) => prev - 1);
       }, 1000);
     } else if (otpTimerEmail === 0) {
+      setOtpEmail('');
+      setErrorMessages((prev) => ({ ...prev, email: '' })); // Reset error messages
       setIsEmailOtpSent(false); // Allow resend OTP
-      // setFormData((prev) => ({
-      //   ...prev,
-      //   email: '', // Reset only the email field
-      // })); // Reset only the email field in formData
-      setErrorMessages((prev) => ({ ...prev, email: '' }));
     }
     return () => clearInterval(timer);
   }, [isEmailOtpSent, otpTimerEmail]);
 
-  // Timer effect for mobile OTP
-  useEffect(() => {
-    let timer;
-    if (isMobileOtpSent && otpTimerMobile > 0) {
-      timer = setInterval(() => {
-        setOtpTimerMobile((prev) => prev - 1);
-      }, 1000);
-    } else if (otpTimerMobile === 0) {
-      setIsMobileOtpSent(false); // Allow resend OTP
-      // setFormData((prev) => ({
-      //   ...prev,
-      //   mobile: '', // Reset only the email field
-      // })); // Reset only the email field in formData
-      setErrorMessages((prev) => ({ ...prev, mobile: '' }));
-    }
-    return () => clearInterval(timer);
-  }, [isMobileOtpSent, otpTimerMobile]);
   const verifyOtp = async (type) => {
     try {
       const otp = type === 'email' ? otpEmail : otpMobile;
@@ -326,96 +323,198 @@ const CourseBanner = () => {
 
     let hasError = false;
 
-    // Validate form fields and set error messages
-    if (!formData.name) {
-      setErrorMessages((prev) => ({ ...prev, name: 'Name is required.' }));
+    // Helper function to set error messages
+    const setError = (field, message) => {
+      setErrorMessages((prev) => ({ ...prev, [field]: message }));
       hasError = true;
+    };
+
+    // Validate Name (Must not be empty & must not start or end with spaces)
+    if (!formData.name || /^\s|\s$/.test(formData.name)) {
+      setError('name', 'Name is required and cannot start or end with spaces.');
     }
 
+    // Validate Mobile
     if (!formData.mobile) {
-      setErrorMessages((prev) => ({
-        ...prev,
-        mobile: 'Mobile number is required.',
-      }));
-      hasError = true;
+      setError('mobile', 'Mobile number is required.');
     }
 
+    // Validate Email
     if (!formData.email) {
-      setErrorMessages((prev) => ({ ...prev, email: 'Email is required.' }));
-      hasError = true;
+      setError('email', 'Email is required.');
     }
 
-    if (!formData.address) {
-      setErrorMessages((prev) => ({
-        ...prev,
-        address: 'Address is required.',
-      }));
-      hasError = true;
+    // Validate Address (Must not be empty & must not start or end with spaces)
+    if (!formData.address || /^\s|\s$/.test(formData.address)) {
+      setError(
+        'address',
+        'Address is required and cannot start or end with spaces.',
+      );
     }
 
-    // Validate GSTIN if provided
-    if (formData.gst_number && !isValidGstin(formData.gst_number)) {
-      setErrorMessages((prev) => ({
-        ...prev,
-        gst_number: '*Invalid GSTIN number',
-      }));
-      hasError = true;
-      localStorage.removeItem('GSTIN');
-      return;
+    // Validate GSTIN (if provided)
+    if (formData.gst_number) {
+      if (!isValidGstin(formData.gst_number)) {
+        setError('gst_number', '*Invalid GSTIN number');
+        localStorage.removeItem('GSTIN');
+      } else {
+        localStorage.setItem('GSTIN', formData.gst_number);
+      }
     }
 
-    // Store GSTIN in localStorage if provided
-    if (formData.gst_number && isValidGstin(formData.gst_number)) {
-      localStorage.setItem('GSTIN', formData.gst_number);
-    }
+    // Stop form submission if there are validation errors
+    if (hasError) return;
 
-    if (hasError) return; // Stop submission if there are validation errors
-
-    // Verify mobile and email before proceeding
+    // Verify Mobile & Email before proceeding
     if (!mobileVerified) {
       alert('Please verify your mobile number before proceeding!');
       return;
     }
-    // Verify mobile and email before proceeding
     if (!emailVerified) {
       alert('Please verify your email address before proceeding!');
       return;
     }
-    // setIsFirstModalOpen(false);
-    // handleOpenSecondModal();
 
     // Prepare API payload
     const apiData = {
-      name: formData.name,
-      address: formData.address, // Assuming organization name is used as address
+      name: formData.name.trim(),
+      address: formData.address.trim(),
       phone_number: formData.mobile,
       email: formData.email,
-      organization: formData.organization_name || '',
+      organization: formData.organization_name?.trim() || '',
       gst_number: formData.gst_number || '',
-      // If optional, make it an empty string if not provided
     };
+
     try {
       const response = await API.post('course_register/', apiData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
+
       console.log('API Response:', response.data);
 
-      if (response.status == 201 && response.data) {
-        let newUserId = response.data?.result?.id;
-        console.log(newUserId);
+      if (response.status === 201 && response.data) {
+        const newUserId = response.data?.result?.id;
+        console.log('New User ID:', newUserId);
         localStorage.setItem('newUserId', newUserId);
         setIsFirstModalOpen(false);
         handleOpenSecondModal();
       }
     } catch (error) {
-      alert(
-        'Please verify your mobile number and email address before proceeding !',
-      );
       console.error('API Error:', error.response ? error.response.data : error);
+      alert(
+        'An error occurred. Please verify your mobile number and email address before proceeding!',
+      );
     }
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   // Reset error messages
+  //   setErrorMessages({
+  //     name: '',
+  //     mobile: '',
+  //     email: '',
+  //     address: '',
+  //     gst_number: '',
+  //   });
+
+  //   let hasError = false;
+  //     // Validate Name (Must not be empty & must not start or end with spaces)
+  //     if (!formData.name?.trim()) {
+  //       setErrorMessages((prev) => ({
+  //         ...prev,
+  //         name: 'Name is required and cannot start or end with spaces.',
+  //       }));
+  //       hasError = true;
+  //     }
+
+  //   if (!formData.mobile) {
+  //     setErrorMessages((prev) => ({
+  //       ...prev,
+  //       mobile: 'Mobile number is required.',
+  //     }));
+  //     hasError = true;
+  //   }
+
+  //   if (!formData.email) {
+  //     setErrorMessages((prev) => ({ ...prev, email: 'Email is required.' }));
+  //     hasError = true;
+  //   }
+
+  //   if (!formData.address?.trim()) {
+  //     setErrorMessages((prev) => ({
+  //       ...prev,
+  //       address: 'Address is required and cannot start or end with spaces.',
+  //     }));
+  //     hasError = true;
+  //   }
+
+  //   // Validate GSTIN if provided
+  //   if (formData.gst_number && !isValidGstin(formData.gst_number)) {
+  //     setErrorMessages((prev) => ({
+  //       ...prev,
+  //       gst_number: '*Invalid GSTIN number',
+  //     }));
+  //     hasError = true;
+  //     localStorage.removeItem('GSTIN');
+  //     return;
+  //   }
+
+  //   // Store GSTIN in localStorage if provided
+  //   if (formData.gst_number && isValidGstin(formData.gst_number)) {
+  //     localStorage.setItem('GSTIN', formData.gst_number);
+  //   }
+
+  //   if (hasError) return; // Stop submission if there are validation errors
+
+  //   // Verify mobile and email before proceeding
+  //   if (!mobileVerified) {
+  //     alert('Please verify your mobile number before proceeding!');
+  //     return;
+  //   }
+  //   // Verify mobile and email before proceeding
+  //   if (!emailVerified) {
+  //     alert('Please verify your email address before proceeding!');
+  //     return;
+  //   }
+  //   // setIsFirstModalOpen(false);
+  //   // handleOpenSecondModal();
+
+  //   // Prepare API payload
+  //   const apiData = {
+  //     name: formData.name,
+  //     address: formData.address, // Assuming organization name is used as address
+  //     phone_number: formData.mobile,
+  //     email: formData.email,
+  //     organization: formData.organization_name || '',
+  //     gst_number: formData.gst_number || '',
+  //     // If optional, make it an empty string if not provided
+  //   };
+  //   try {
+  //     const response = await API.post('course_register/', apiData, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  //     console.log('API Response:', response.data);
+
+  //     if (response.status == 201 && response.data) {
+  //       let newUserId = response.data?.result?.id;
+  //       console.log(newUserId);
+  //       localStorage.setItem('newUserId', newUserId);
+  //       setIsFirstModalOpen(false);
+  //       handleOpenSecondModal();
+  //     }
+  //   } catch (error) {
+  //     alert(
+  //       'Please verify your mobile number and email address before proceeding !',
+  //     );
+  //     console.error('API Error:', error.response ? error.response.data : error);
+  //   }
+  // };
 
   const handleSelectEvent = async (event) => {
     // Assuming the event contains course and slot information
@@ -425,7 +524,6 @@ const CourseBanner = () => {
       slotId: event.slotId, // You might need to get the slot ID from the event or context
       amount: selectedCourse.amount,
     };
-    console.log(data);
     setOrderData(data);
   };
 
